@@ -1,3 +1,13 @@
 <resources>
     <string name="app_name">MovieInfoApp</string>
+    <string name="google_icon">Google Icon</string>
+    <string name="facebook_icon">Facebook Icon</string>
+    <string name="sign_in_tab">Sign In</string>
+    <string name="sign_up_tab">Sign Up</string>
+    <string name="email_field">Email</string>
+    <string name="password_field">Password</string>
+    <string name="verify_password_field">Verify Password</string>
+    <string name="forgot_password_button">Forgot Password?</string>
+    <string name="login_button">Login</string>
+    <string name="create_button">Create</string>
 </resources>

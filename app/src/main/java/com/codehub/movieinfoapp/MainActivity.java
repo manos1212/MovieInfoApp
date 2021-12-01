@@ -32,16 +32,12 @@ public class MainActivity extends AbstractActivity {
         LinearLayoutManager manager = new LinearLayoutManager(MainActivity.this);
         category_recyclerView.setLayoutManager(manager);
         category_recyclerView.setAdapter(categoryAdapter);
-
-
-
     }
 
     @Override
     public void stopOperations() {
 
     }
-
 
     private ArrayList<MoviesCategory> prepareData() {
         ArrayList<MoviesCategory> categories = new ArrayList<>();
@@ -60,7 +56,6 @@ public class MainActivity extends AbstractActivity {
         movie2.id = 2;
         movie2.movieName = "Squid Game 2";
         movie2.movieThumbnailUrl =  "https://images7.alphacoders.com/118/thumb-1920-1181582.jpg";
-
 
         Movie movie3 = new Movie();
         movie3.id = 3;
@@ -86,7 +81,6 @@ public class MainActivity extends AbstractActivity {
         trending.movies.add(movie1);
 /////////////////////////////////////////////////////
         //TOP RATED
-
 
         MoviesCategory topRated = new MoviesCategory();
         topRated.id = 2;
@@ -126,7 +120,6 @@ public class MainActivity extends AbstractActivity {
         topRated.movies.add(movie10);
         topRated.movies.add(movie10);
 
-
         categories.add(trending);
         categories.add(topRated);
         categories.add(topRated);
@@ -136,7 +129,4 @@ public class MainActivity extends AbstractActivity {
 
         return categories;
     }
-
-
-
 }

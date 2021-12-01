@@ -6,6 +6,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 abstract class AbstractActivity extends AppCompatActivity {
+
     abstract public int getLayoutRes();
 
     abstract public void startOperations();
@@ -38,7 +39,6 @@ abstract class AbstractActivity extends AppCompatActivity {
     protected void onPause() {
         stopOperations();
         super.onPause();
-
     }
 
     @Override
