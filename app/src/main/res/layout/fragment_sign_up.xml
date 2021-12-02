@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".SignUpFragment">
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+       >
+
+        <com.google.android.material.textfield.TextInputLayout
+            app:boxCornerRadiusTopStart="20dp"
+            app:boxCornerRadiusBottomStart="20dp"
+            app:boxCornerRadiusBottomEnd="20dp"
+            app:boxCornerRadiusTopEnd="20dp"
+            android:hint="Email"
+            android:id="@+id/textField_email"
+            app:boxStrokeWidthFocused="0dp"
+            android:inputType="textEmailAddress"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintWidth_percent="0.8"
+            app:layout_constraintVertical_bias="0.1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:boxStrokeWidth="0dp"
+            app:hintTextColor="@color/black"
+            app:endIconMode="clear_text">
+            <!--        app:startIconDrawable="@drawable/ic_baseline_email_24"-->
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:backgroundTint="#F1EEEE"
+
+                android:paddingStart="20dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </com.google.android.material.textfield.TextInputLayout>
+        <!--    android:hint="@string/Login_edit_email_hint"-->
+        <!--    android:backgroundTint="@color/txtBackgroundColor"-->
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textField_pwd"
+            android:hint="Password"
+            android:layout_marginTop="25dp"
+            android:layout_width="0dp"
+            app:boxCornerRadiusTopStart="20dp"
+            app:boxCornerRadiusBottomStart="20dp"
+            app:boxCornerRadiusBottomEnd="20dp"
+            app:boxCornerRadiusTopEnd="20dp"
+            android:layout_height="wrap_content"
+            app:boxStrokeWidthFocused="0dp"
+            app:layout_constraintWidth_percent="0.8"
+            app:layout_constraintVertical_bias="0"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/textField_email"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:boxStrokeWidth="0dp"
+            app:hintTextColor="@color/black"
+            app:endIconMode="password_toggle"
+            app:counterEnabled="true"
+            app:counterMaxLength="25">
+            <!--        app:startIconDrawable="@drawable/ic_round_vpn_key_24"-->
+            <com.google.android.material.textfield.TextInputEditText
+                android:backgroundTint="#F1EEEE"
+                android:paddingStart="20dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textPassword"/>
+        </com.google.android.material.textfield.TextInputLayout>
+        <!--    android:hint="@string/Login_edit_pwd_hint"-->
+        <!--    android:backgroundTint="@color/txtBackgroundColor"-->
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:hint="Password"
+            android:id="@+id/textField_pwdRetype"
+            android:layout_marginTop="5dp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintWidth_percent="0.8"
+            app:layout_constraintVertical_bias="0"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/textField_pwd"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:boxStrokeWidth="0dp"
+            app:boxCornerRadiusTopStart="20dp"
+            app:boxCornerRadiusBottomStart="20dp"
+            app:boxCornerRadiusBottomEnd="20dp"
+            app:boxCornerRadiusTopEnd="20dp"
+            app:hintTextColor="@color/black"
+            app:boxStrokeWidthFocused="0dp"
+            app:endIconMode="password_toggle"
+            app:counterEnabled="true"
+            app:counterMaxLength="25">
+            <!--        app:startIconDrawable="@drawable/ic_round_vpn_key_24"-->
+            <com.google.android.material.textfield.TextInputEditText
+                android:paddingStart="20dp"
+                android:inputType="textPassword"
+                android:backgroundTint="#F1EEEE"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </com.google.android.material.textfield.TextInputLayout>
+        <Button
+            android:layout_marginTop="15dp"
+            android:background="@drawable/login_buttons_shape"
+            android:id="@+id/login_btn1"
+            app:backgroundTint="@null"
+            android:text="Create Account"
+            android:foreground="?attr/selectableItemBackground"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintTop_toBottomOf="@id/textField_pwdRetype"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_width="0dp"
+            app:layout_constraintWidth_percent="0.8"
+            android:layout_height="wrap_content"/>
+
+        <!--    android:text="@string/Login_forgotten"-->
+    </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+</FrameLayout>
