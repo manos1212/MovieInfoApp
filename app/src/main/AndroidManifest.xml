@@ -15,7 +15,8 @@
         <activity android:name=".LoginActivity"
             android:exported="true"
             android:label="Movie"
-            android:windowSoftInputMode="adjustPan">
+            android:windowSoftInputMode="adjustPan"
+            android:configChanges="orientation|screenSize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

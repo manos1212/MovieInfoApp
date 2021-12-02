@@ -111,7 +111,7 @@
         <Button
             android:layout_marginTop="15dp"
             android:background="@drawable/login_buttons_shape"
-            android:id="@+id/login_btn1"
+            android:id="@+id/signUp_btn"
             app:backgroundTint="@null"
             android:text="Create Account"
             android:foreground="?attr/selectableItemBackground"

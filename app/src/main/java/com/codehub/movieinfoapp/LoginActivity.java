@@ -22,6 +22,8 @@ public class LoginActivity extends AbstractActivity {
     private ViewPager2 viewPager;
     private final String[] namesList ={"Sign In","Sign Up"};
     FloatingActionButton  google_btn,facebook_btn;
+    ImageView app_logo;
+    TextView welcome_text;
 
     @Override
     public int getLayoutRes() {
@@ -30,19 +32,11 @@ public class LoginActivity extends AbstractActivity {
 
     @Override
     public void startOperations() {
-//
-////        Button login_button = findViewById(R.id.login_button);
-//        login_button.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-//                intent.putExtra("login_type", "Email");
-//                startActivity(intent);
-//            }
-//        });
 
 //                LoginActivity .this.getWindow().setSoftInputMode(
 //                WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
+        app_logo = findViewById(R.id.app_logo_icon);
+        welcome_text = findViewById(R.id.login_title);
         tabLayout = findViewById(R.id.email_Tabs);
         viewPager = findViewById(R.id.Vpager);
         facebook_btn = findViewById(R.id.facebook_fab);
@@ -57,44 +51,17 @@ public class LoginActivity extends AbstractActivity {
                 (tab, position) -> tab.setText(namesList[position])
         ).attach();
 
+        app_logo.setTranslationY(-300);
+        welcome_text.setTranslationX(1000);
         google_btn.setTranslationY(300);
         facebook_btn.setTranslationY(300);
-        tabLayout.setTranslationX(800);
+        tabLayout.setTranslationX(1000);
+        app_logo.animate().translationY(0).alpha(1).setDuration(1200).setStartDelay(100).start();
+        welcome_text.animate().translationX(0).alpha(1).setDuration(1200).setStartDelay(1000).start();
         google_btn.animate().translationY(0).alpha(1).setDuration(1200).setStartDelay(400).start();
         facebook_btn.animate().translationY(0).alpha(1).setDuration(1200).setStartDelay(600).start();
         tabLayout.animate().translationX(0).alpha(1).setDuration(1000).setStartDelay(600).start();
 
-
-
-
-//        ImageView google_button  = findViewById(R.id.google_button);
-//        google_button.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-//                intent.putExtra("login_type", "Google");
-//                startActivity(intent);
-//            }
-//        });
-
-//        ImageView facebook_button  = findViewById(R.id.facebook_button);
-//        facebook_button.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-//                intent.putExtra("login_type", "Facebook");
-//                startActivity(intent);
-//            }
-//        });
-
-//        TextView forgot_password = findViewById(R.id.forgot_password);
-//        forgot_password.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-//                startActivity(intent);
-//            }
-//        });
     }
 
     @Override
