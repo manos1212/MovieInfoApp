@@ -15,7 +15,7 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
-public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.CustomViewHolder> {
+public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHolder> {
 
     private Context context;
     private ArrayList<Movie> movies;
@@ -28,17 +28,21 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.CustomViewHo
     }
 
     @Override
-    public CustomViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public MovieViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view;
-        view = inflater.inflate(R.layout.single_movie, parent, false);
-        return new CustomViewHolder(view);
+        view = inflater.inflate(R.layout.holder_single_movie, parent, false);
+        return new MovieViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(CustomViewHolder holder, int position) {
+    public void onBindViewHolder(MovieViewHolder holder, int position) {
         Movie movie = movies.get(position);
         holder.movieName_textView.setText(movie.movieName);
-        Picasso.get().load(movie.movieThumbnailUrl).into(holder.movieThumbnail);
+        if(movie.movieThumbnailUrl!=null) {
+            Picasso.get().load(movie.movieThumbnailUrl).into(holder.movieThumbnail);
+        }else{
+            Picasso.get().load(R.drawable.image_place_holder).into(holder.movieThumbnail);
+        }
     }
 
     @Override
@@ -47,11 +51,11 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.CustomViewHo
     }
 
 
-    public class CustomViewHolder extends RecyclerView.ViewHolder {
-        public ImageView movieThumbnail;
+    public static class MovieViewHolder extends RecyclerView.ViewHolder {
         public TextView movieName_textView;
+        public ImageView movieThumbnail;
 
-        public CustomViewHolder(View itemView) {
+        public MovieViewHolder(View itemView) {
             super(itemView);
             movieName_textView = (TextView) itemView.findViewById(R.id.movieName_textView);
             movieThumbnail = (ImageView) itemView.findViewById(R.id.movie_thumbnail);

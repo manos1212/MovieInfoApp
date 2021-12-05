@@ -1,22 +1,28 @@
-package com.codehub.movieinfoapp;
+package com.codehub.movieinfoapp.ui;
 
-import android.graphics.drawable.Drawable;
+import android.content.Intent;
+import android.view.MenuItem;
 
+import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+
+import com.codehub.movieinfoapp.common.AbstractActivity;
+import com.codehub.movieinfoapp.R;
 import com.codehub.movieinfoapp.adapters.CategoryAdapter;
 import com.codehub.movieinfoapp.models.Movie;
 import com.codehub.movieinfoapp.models.MoviesCategory;
+import com.codehub.movieinfoapp.rest_api.search_activity.SearchActivity;
+import com.google.android.material.appbar.MaterialToolbar;
 
-import java.io.InputStream;
-import java.net.URL;
 import java.util.ArrayList;
 
 public class MainActivity extends AbstractActivity {
     private RecyclerView category_recyclerView;
     private CategoryAdapter categoryAdapter;
     private ArrayList<MoviesCategory> categories;
+    MaterialToolbar topAppBar;
 
     @Override
     public int getLayoutRes() {
@@ -25,13 +31,27 @@ public class MainActivity extends AbstractActivity {
 
     @Override
     public void startOperations() {
-
         category_recyclerView = findViewById(R.id.category_recyclerView);
+        topAppBar = findViewById(R.id.topAppBar);
         categories=prepareData();
         categoryAdapter = new CategoryAdapter(categories,MainActivity.this);
         LinearLayoutManager manager = new LinearLayoutManager(MainActivity.this);
         category_recyclerView.setLayoutManager(manager);
         category_recyclerView.setAdapter(categoryAdapter);
+
+
+
+        topAppBar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                if(item.getItemId()==R.id.search){
+                    Intent intent = new Intent(MainActivity.this, SearchActivity.class);
+                    startActivity(intent);
+                }
+                return false;
+            }
+        });
+
     }
 
     @Override

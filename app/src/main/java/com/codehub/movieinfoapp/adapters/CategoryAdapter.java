@@ -16,7 +16,7 @@ import com.codehub.movieinfoapp.models.MoviesCategory;
 import java.util.ArrayList;
 
 
-public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHolder> {
+public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.CategoryViewHolder> {
 
     public ArrayList<MoviesCategory> categories;
     private Context context;
@@ -29,13 +29,13 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
     }
 
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = layoutInflater.inflate(R.layout.single_movie_category, parent, false);
-        return new ViewHolder(view);
+    public CategoryViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View view = layoutInflater.inflate(R.layout.holder_single_movie_category, parent, false);
+        return new CategoryViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(CategoryViewHolder holder, int position) {
         holder.recyclerView.setAdapter(new MovieAdapter(context, categories.get(position).movies));
         holder.recyclerView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
         holder.recyclerView.setHasFixedSize(true);
@@ -47,11 +47,11 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
         return categories.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public class CategoryViewHolder extends RecyclerView.ViewHolder {
         RecyclerView recyclerView;
         TextView categoryName;
 
-        public ViewHolder(View itemView) {
+        public CategoryViewHolder(View itemView) {
             super(itemView);
             recyclerView = (RecyclerView) itemView.findViewById(R.id.movies_recycler_view);
             categoryName = (TextView) itemView.findViewById(R.id.category_name_textView);

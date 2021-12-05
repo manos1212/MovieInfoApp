@@ -1,4 +1,4 @@
-package com.codehub.movieinfoapp;
+package com.codehub.movieinfoapp.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,10 +10,10 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.codehub.movieinfoapp.R;
 import com.google.android.material.textfield.TextInputLayout;
 
 public class SignInFragment extends Fragment {
@@ -33,7 +33,7 @@ public class SignInFragment extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+//        getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
         username = view.findViewById(R.id.textField_email);
         password = view.findViewById(R.id.textField_pwd);
         forgot_pwd = view.findViewById(R.id.login_forgotten);

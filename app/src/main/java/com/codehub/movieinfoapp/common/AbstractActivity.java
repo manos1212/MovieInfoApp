@@ -1,11 +1,11 @@
-package com.codehub.movieinfoapp;
+package com.codehub.movieinfoapp.common;
 
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-abstract class AbstractActivity extends AppCompatActivity {
+public abstract class AbstractActivity extends AppCompatActivity {
 
     abstract public int getLayoutRes();
 

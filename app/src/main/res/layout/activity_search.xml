@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".rest_api.search_activity.SearchActivity"
+    android:background="@color/black">
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/textField_Search_layout"
+        android:layout_margin="20dp"
+        app:hintEnabled="false"
+        app:boxStrokeWidthFocused="0dp"
+        android:inputType="text"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/search_activity_header"
+        app:boxStrokeWidth="0dp"
+        app:endIconMode="clear_text"
+        app:startIconTint="@color/white"
+        app:endIconTint="@color/white"
+        app:startIconDrawable="@drawable/ic_round_search_24"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <!--        app:startIconDrawable="@drawable/ic_baseline_email_24"-->
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:textCursorDrawable="@drawable/search_bar_text_cursor_shape"
+            android:textColor="@color/white"
+            android:id="@+id/textField_Search"
+            android:paddingStart="20dp"
+            android:hint="Search for a movie Title or Category"
+            android:textColorHint="#6C6969"
+            android:background="@drawable/search_bar_shape"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"/>
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <ImageView
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:clickable="true"
+        android:focusable="true"
+        android:layout_margin="10dp"
+        android:id="@+id/back_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:src="@drawable/ic_round_arrow_back_24"
+        android:backgroundTint="@color/black"/>
+    <TextView
+        android:text="Search for a movie"
+        android:textColor="@color/white"
+        android:textSize="22sp"
+        android:gravity="center"
+        android:id="@+id/search_activity_header"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="@id/back_btn"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+    <ProgressBar
+        android:id="@+id/search_progress_indicator"
+        android:elevation="1dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:visibility="gone" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/searchForMovies_recycler_view"
+        android:layout_marginTop="6dp"
+        android:layout_marginStart="-10dp"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textField_Search_layout"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:orientation="vertical"
+        tools:listitem="@layout/holder_search_single_movie"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
+
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

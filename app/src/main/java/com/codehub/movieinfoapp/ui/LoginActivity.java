@@ -1,17 +1,12 @@
-package com.codehub.movieinfoapp;
+package com.codehub.movieinfoapp.ui;
 
-import android.app.Activity;
-import android.content.Intent;
-import android.util.Log;
-import android.view.View;
-import android.view.WindowManager;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.annotation.Nullable;
 import androidx.viewpager2.widget.ViewPager2;
 
+import com.codehub.movieinfoapp.common.AbstractActivity;
+import com.codehub.movieinfoapp.R;
 import com.codehub.movieinfoapp.adapters.VPAdapter;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
@@ -41,7 +36,7 @@ public class LoginActivity extends AbstractActivity {
         viewPager = findViewById(R.id.Vpager);
         facebook_btn = findViewById(R.id.facebook_fab);
         google_btn = findViewById(R.id.google_fab);
-        viewPager.setUserInputEnabled(true);//disable tabviews scroll
+        viewPager.setUserInputEnabled(false);//disable tabviews scroll
 
         VPAdapter vpAdapter = new VPAdapter(getSupportFragmentManager(),getLifecycle());
         vpAdapter.addFragment(new SignInFragment());

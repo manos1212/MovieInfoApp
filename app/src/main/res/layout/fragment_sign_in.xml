@@ -1,16 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout  xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".SignInFragment">
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-<androidx.constraintlayout.widget.ConstraintLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    tools:context=".ui.SignInFragment">
+
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/textField_email"
@@ -83,7 +78,7 @@
     <!--    android:hint="@string/Login_edit_pwd_hint"-->
     <!--    android:backgroundTint="@color/txtBackgroundColor"-->
     <Button
-        android:layout_marginTop="25dp"
+
         android:id="@+id/login_btn"
         app:backgroundTint="@null"
         android:text="Login"
@@ -113,7 +108,40 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         />
-    <!--    android:text="@string/Login_forgotten"-->
+
+<!--    <com.google.android.material.floatingactionbutton.FloatingActionButton-->
+<!--        android:id="@+id/google_fab"-->
+<!--        app:fabSize="normal"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:backgroundTint="@color/white"-->
+<!--        app:tint="@null"-->
+<!--        app:maxImageSize="30dp"-->
+<!--        android:elevation="35dp"-->
+<!--        app:borderWidth="0dp"-->
+<!--        android:src="@drawable/google_icon"-->
+<!--        app:layout_constraintTop_toBottomOf="@id/login_btn"-->
+<!--        app:layout_constraintEnd_toEndOf="@id/facebook_fab"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"/>-->
+
+<!--    <com.google.android.material.floatingactionbutton.FloatingActionButton-->
+<!--        android:id="@+id/facebook_fab"-->
+
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:backgroundTint="@color/white"-->
+<!--        app:borderWidth="0dp"-->
+
+<!--        app:tint="@null"-->
+<!--        android:elevation="35dp"-->
+<!--        app:maxImageSize="30dp"-->
+<!--        android:scaleType="center"-->
+
+<!--        android:src="@drawable/facebook_icon"-->
+<!--        app:layout_constraintTop_toTopOf="@id/google_fab"-->
+<!--        app:layout_constraintBottom_toBottomOf="@id/google_fab"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="@id/google_fab"/>-->
 </androidx.constraintlayout.widget.ConstraintLayout>
-    </ScrollView>
-</FrameLayout>
+    <!--    android:text="@string/Login_forgotten"-->
