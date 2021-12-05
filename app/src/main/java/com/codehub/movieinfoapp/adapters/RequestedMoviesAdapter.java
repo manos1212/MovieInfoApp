@@ -30,10 +30,13 @@ public class RequestedMoviesAdapter extends RecyclerView.Adapter<RequestedMovies
         this.layoutInflater = LayoutInflater.from(context);
     }
 
+
     @Override
     public MovieViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = layoutInflater.inflate(R.layout.holder_search_single_movie, parent, false);
-        return new MovieViewHolder(view);
+
+            View view = layoutInflater.inflate(R.layout.holder_search_single_movie, parent, false);
+            return new MovieViewHolder(view);
+
     }
 
     @Override
@@ -74,6 +77,7 @@ public class RequestedMoviesAdapter extends RecyclerView.Adapter<RequestedMovies
             movieThumbnail = (ImageView) itemView.findViewById(R.id.search_movie_thumbnail);
         }
     }
+
 
     public  void filterList(ArrayList<Movie> filteredList){
         requestedMovies = filteredList;
