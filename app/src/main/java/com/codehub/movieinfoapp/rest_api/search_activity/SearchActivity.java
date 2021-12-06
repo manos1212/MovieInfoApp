@@ -22,7 +22,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.codehub.movieinfoapp.BuildConfig;
-import com.codehub.movieinfoapp.adapters.RequestedCategoryMoviesAdapter;
+//import com.codehub.movieinfoapp.adapters.RequestedCategoryMoviesAdapter;
 import com.codehub.movieinfoapp.adapters.RequestedMoviesAdapter;
 import com.codehub.movieinfoapp.common.AbstractActivity;
 import com.codehub.movieinfoapp.R;
@@ -46,9 +46,9 @@ public class SearchActivity extends AbstractActivity {
     RecyclerView search_movies_rv;
     RecyclerView search_movie_category_rv;
     ArrayList<Movie> movies;
-    ArrayList<Movie> categoryMovie;
+    ArrayList<Movie> categoryMovies;
     RequestedMoviesAdapter movieAdapter;
-    RequestedCategoryMoviesAdapter categoryMoviesAdapter;
+//    RequestedCategoryMoviesAdapter categoryMoviesAdapter;
     Map<String,Integer> api_movie_categories;
     String category_type;
     TextView movie_list_title;
@@ -65,7 +65,7 @@ public class SearchActivity extends AbstractActivity {
         searchText = findViewById(R.id.textField_Search);
         back_btn = findViewById(R.id.back_btn);
         movie_list_title  = findViewById(R.id.search_movie_list_title);
-        category_title = findViewById(R.id.search_category_title);
+//        category_title = findViewById(R.id.search_category_title);
         back_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -101,16 +101,16 @@ public class SearchActivity extends AbstractActivity {
 
 
         search_movies_rv = findViewById(R.id.searchForMovies_recycler_view);
-        search_movie_category_rv = findViewById(R.id.searchForMovieCategory_recycler_view);
+//        search_movie_category_rv = findViewById(R.id.searchForMovieCategory_recycler_view);
 //        prepareData(searchText.getText().toString());
 
-        categoryMoviesAdapter = new RequestedCategoryMoviesAdapter(SearchActivity.this,categoryMovie);
-        movieAdapter = new RequestedMoviesAdapter(SearchActivity.this,movies);
+//        categoryMoviesAdapter = new RequestedCategoryMoviesAdapter(SearchActivity.this,categoryMovies);
+        movieAdapter = new RequestedMoviesAdapter(SearchActivity.this,movies,categoryMovies);
         LinearLayoutManager manager = new LinearLayoutManager(SearchActivity.this);
-        LinearLayoutManager manager2 = new LinearLayoutManager(SearchActivity.this, LinearLayoutManager.HORIZONTAL, false);
+//        LinearLayoutManager manager2 = new LinearLayoutManager(SearchActivity.this, LinearLayoutManager.HORIZONTAL, false);
         search_movies_rv.setLayoutManager(manager);
-        search_movie_category_rv.setLayoutManager(manager2);
-        search_movie_category_rv.setAdapter(categoryMoviesAdapter);
+//        search_movie_category_rv.setLayoutManager(manager2);
+//        search_movie_category_rv.setAdapter(categoryMoviesAdapter);
         search_movies_rv.setAdapter(movieAdapter);
 
     }
@@ -125,9 +125,9 @@ public class SearchActivity extends AbstractActivity {
             prepareData(str);
         }else{
             movie_list_title.setText("");
-            category_title.setText("");
+//            category_title.setText("");
             movieAdapter.filterList(new ArrayList<>());
-            categoryMoviesAdapter.filterList(new ArrayList<>());
+//            movieAdapter.filterList(new ArrayList<>());
         }
     }
 
@@ -233,9 +233,9 @@ public class SearchActivity extends AbstractActivity {
                 //Add request
                 queue.add(categoryRequest);
             } else {
-                category_title.setVisibility(View.GONE);
-                category_title.setText("");
-                categoryMoviesAdapter.filterList(new ArrayList<>());
+//                category_title.setVisibility(View.GONE);
+//                category_title.setText("");
+                movieAdapter.filterList(new ArrayList<>());
             }
 
 //        }else{
@@ -314,11 +314,11 @@ public class SearchActivity extends AbstractActivity {
 
         }
         //Add the requested/filtered Movies to recyclerView through the MovieAdapter
-            TextView category_title = findViewById(R.id.search_category_title);
-            category_title.setVisibility(View.VISIBLE);
-            String text = "Category  " +'"'+ category_type + '"';
-            category_title.setText(text);
-            categoryMoviesAdapter.filterList(movies);
+//            TextView category_title = findViewById(R.id.search_category_title);
+//            category_title.setVisibility(View.VISIBLE);
+//            String text = "Category  " +'"'+ category_type + '"';
+//            category_title.setText(text);
+            movieAdapter.filterList(movies);
 //        }
 
 

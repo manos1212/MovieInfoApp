@@ -75,31 +75,31 @@
         android:indeterminate="true"
         android:indeterminateTintMode="src_atop"
         android:indeterminateTint="#F61E1E"/>
-    <TextView
-        android:padding="5dp"
-        android:id="@+id/search_category_title"
-        android:layout_marginStart="8dp"
-        android:layout_width="wrap_content"
-        tools:text="Horror"
-        android:textSize="22sp"
-        android:textColor="@color/white"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/textField_Search_layout"
-        app:layout_constraintBottom_toTopOf="@+id/searchForMovieCategory_recycler_view"
-        app:layout_constraintStart_toStartOf="@+id/searchForMovies_recycler_view" />
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/searchForMovieCategory_recycler_view"
-        android:layout_marginTop="6dp"
-        android:layout_marginStart="-10dp"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/search_category_title"
+<!--    <TextView-->
+<!--        android:padding="5dp"-->
+<!--        android:id="@+id/search_category_title"-->
+<!--        android:layout_marginStart="8dp"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        tools:text="Horror"-->
+<!--        android:textSize="22sp"-->
+<!--        android:textColor="@color/white"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        app:layout_constraintTop_toBottomOf="@id/textField_Search_layout"-->
+<!--        app:layout_constraintBottom_toTopOf="@+id/searchForMovieCategory_recycler_view"-->
+<!--        app:layout_constraintStart_toStartOf="@+id/searchForMovies_recycler_view" />-->
+<!--    <androidx.recyclerview.widget.RecyclerView-->
+<!--        android:id="@+id/searchForMovieCategory_recycler_view"-->
+<!--        android:layout_marginTop="6dp"-->
+<!--        android:layout_marginStart="-10dp"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="0dp"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/search_category_title"-->
 
-        android:orientation="horizontal"
-        tools:listitem="@layout/holder_single_movie"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
+<!--        android:orientation="horizontal"-->
+<!--        tools:listitem="@layout/holder_single_movie"-->
+<!--        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>-->
 
     <TextView
         android:padding="5dp"
@@ -111,8 +111,8 @@
         android:elevation="11dp"
         android:textColor="@color/white"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/searchForMovieCategory_recycler_view"
         app:layout_constraintBottom_toTopOf="@+id/searchForMovies_recycler_view"
+        app:layout_constraintTop_toBottomOf="@id/textField_Search_layout"
         app:layout_constraintStart_toStartOf="@+id/searchForMovies_recycler_view" />
 
     <androidx.recyclerview.widget.RecyclerView
