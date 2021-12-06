@@ -63,7 +63,7 @@ public class RequestedMoviesAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof MovieViewHolder && requestedMovies!=null && requestedMovies.size()>0) {
-            Movie movie = requestedMovies.get(position);
+            Movie movie = requestedMovies.get(position-1);//use -1 because 1st item ins vertical recycler view is the horizontal rv
             ((MovieViewHolder)holder).movieName_textView.setText(movie.movieName);
             if(movie.movieThumbnailUrl!=null) {
                 //parse url inside xml image_thumbnail
@@ -80,6 +80,11 @@ public class RequestedMoviesAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         } else if (holder instanceof CategoryMovieViewHolder) {
             String text;
             if(requestedCategoryMovies!=null){
+                if(requestedMovies==null || requestedMovies.size()==0){
+                    ((CategoryMovieViewHolder)holder).movies_tag_word.setVisibility(View.GONE);
+                }else{
+                    ((CategoryMovieViewHolder)holder).movies_tag_word.setVisibility(View.VISIBLE);
+                }
                 text  = "Category " + '"'+categoryName+'"';
                 ((CategoryMovieViewHolder)holder).categoryName.setVisibility(View.VISIBLE);
                 ((CategoryMovieViewHolder)holder).recyclerView.setVisibility(View.VISIBLE);
@@ -105,7 +110,8 @@ public class RequestedMoviesAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     @Override
     public int getItemCount() {
       if(requestedMovies!=null && requestedMovies.size()>0){
-            return requestedMovies.size();
+          System.out.println("YAAAAA"+requestedMovies.size());
+            return requestedMovies.size()+1;
         }else{
           if(requestedCategoryMovies!=null && requestedCategoryMovies.size()>0){
               return 1;
@@ -132,6 +138,7 @@ public class RequestedMoviesAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     private static class CategoryMovieViewHolder extends RecyclerView.ViewHolder {
         RecyclerView recyclerView;
         TextView categoryName;
+        TextView movies_tag_word;
         ConstraintLayout category_hz_list;
 
         public CategoryMovieViewHolder(View itemView) {
@@ -139,6 +146,7 @@ public class RequestedMoviesAdapter extends RecyclerView.Adapter<RecyclerView.Vi
             recyclerView = (RecyclerView) itemView.findViewById(R.id.movies_recycler_view);
             categoryName = (TextView) itemView.findViewById(R.id.category_name_textView);
             category_hz_list = (ConstraintLayout) itemView.findViewById(R.id.category_horizontal_list_layout);
+            movies_tag_word = (TextView) itemView.findViewById(R.id.movieList_results);
             categoryName.setVisibility(View.GONE);
             recyclerView.setVisibility(View.GONE);
             category_hz_list.setPadding(0,0,0,0);
