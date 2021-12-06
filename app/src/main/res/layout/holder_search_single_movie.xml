@@ -13,7 +13,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:backgroundTint="#424141"
-    android:layout_margin="2dp"
+        android:layout_margin="2dp"
         app:cardCornerRadius="4dp">
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_height="match_parent"

@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.codehub.movieinfoapp.R;
@@ -16,17 +17,20 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 
 public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHolder> {
-
+    private boolean isApi;
     private Context context;
     private ArrayList<Movie> movies;
     private LayoutInflater inflater;
+    private static final String base_url = "https://image.tmdb.org/t/p/w500";
 
-    public MovieAdapter(Context context, ArrayList<Movie> movies) {
+    public MovieAdapter(Context context, ArrayList<Movie> movies, boolean isApi) {
+        this.isApi = isApi;
         this.context = context;
         this.movies = movies;
         this.inflater = LayoutInflater.from(context);
     }
 
+    @NonNull
     @Override
     public MovieViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view;
@@ -37,9 +41,9 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
     @Override
     public void onBindViewHolder(MovieViewHolder holder, int position) {
         Movie movie = movies.get(position);
-        holder.movieName_textView.setText(movie.movieName);
+        holder.movieName_textView.setText("");
         if(movie.movieThumbnailUrl!=null) {
-            Picasso.get().load(movie.movieThumbnailUrl).into(holder.movieThumbnail);
+            Picasso.get().load(isApi? base_url + movie.movieThumbnailUrl:movie.movieThumbnailUrl).into(holder.movieThumbnail);
         }else{
             Picasso.get().load(R.drawable.image_place_holder).into(holder.movieThumbnail);
         }
@@ -47,7 +51,11 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
 
     @Override
     public int getItemCount() {
-        return movies.size();
+        if(movies!=null){
+            return movies.size();
+        }else{
+            return 0;
+        }
     }
 
 

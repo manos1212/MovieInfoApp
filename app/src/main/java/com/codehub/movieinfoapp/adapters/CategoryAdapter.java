@@ -36,7 +36,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
 
     @Override
     public void onBindViewHolder(CategoryViewHolder holder, int position) {
-        holder.recyclerView.setAdapter(new MovieAdapter(context, categories.get(position).movies));
+        holder.recyclerView.setAdapter(new MovieAdapter(context, categories.get(position).movies,false));
         holder.recyclerView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
         holder.recyclerView.setHasFixedSize(true);
         holder.categoryName.setText(categories.get(position).categoryName);

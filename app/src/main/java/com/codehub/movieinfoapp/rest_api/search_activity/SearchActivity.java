@@ -1,10 +1,14 @@
 package com.codehub.movieinfoapp.rest_api.search_activity;
 
+import android.annotation.SuppressLint;
+import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -12,6 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -52,7 +57,6 @@ public class SearchActivity extends AbstractActivity {
     Map<String,Integer> api_movie_categories;
     String category_type;
     TextView movie_list_title;
-    TextView category_title;
 
     @Override
     public int getLayoutRes() {
@@ -61,6 +65,7 @@ public class SearchActivity extends AbstractActivity {
 
     @Override
     public void startOperations() {
+
         api_movie_categories = setCategories();
         searchText = findViewById(R.id.textField_Search);
         back_btn = findViewById(R.id.back_btn);
@@ -101,17 +106,13 @@ public class SearchActivity extends AbstractActivity {
 
 
         search_movies_rv = findViewById(R.id.searchForMovies_recycler_view);
-//        search_movie_category_rv = findViewById(R.id.searchForMovieCategory_recycler_view);
-//        prepareData(searchText.getText().toString());
-
-//        categoryMoviesAdapter = new RequestedCategoryMoviesAdapter(SearchActivity.this,categoryMovies);
-        movieAdapter = new RequestedMoviesAdapter(SearchActivity.this,movies,categoryMovies);
+        movieAdapter = new RequestedMoviesAdapter(SearchActivity.this,movies,categoryMovies,category_type);
         LinearLayoutManager manager = new LinearLayoutManager(SearchActivity.this);
-//        LinearLayoutManager manager2 = new LinearLayoutManager(SearchActivity.this, LinearLayoutManager.HORIZONTAL, false);
         search_movies_rv.setLayoutManager(manager);
-//        search_movie_category_rv.setLayoutManager(manager2);
-//        search_movie_category_rv.setAdapter(categoryMoviesAdapter);
+
         search_movies_rv.setAdapter(movieAdapter);
+
+        hideKeyboardOnScroll(search_movies_rv);
 
     }
 
@@ -123,10 +124,13 @@ public class SearchActivity extends AbstractActivity {
     private void applyChecks(String str) {
         if(!str.isEmpty()){
             prepareData(str);
+            //scroll top
+            search_movies_rv.getLayoutManager().scrollToPosition(0);
         }else{
             movie_list_title.setText("");
 //            category_title.setText("");
-            movieAdapter.filterList(new ArrayList<>());
+            movieAdapter.filterList(null,false,null);
+            movieAdapter.filterList(null,true,null);
 //            movieAdapter.filterList(new ArrayList<>());
         }
     }
@@ -235,7 +239,7 @@ public class SearchActivity extends AbstractActivity {
             } else {
 //                category_title.setVisibility(View.GONE);
 //                category_title.setText("");
-                movieAdapter.filterList(new ArrayList<>());
+                movieAdapter.filterList(null,true,category_type);
             }
 
 //        }else{
@@ -270,19 +274,8 @@ public class SearchActivity extends AbstractActivity {
             }
 
         }
-        //Add the requested/filtered Movies to recyclerView through the MovieAdapter
-//        TextView category_title = findViewById(R.id.search_category_title);
-//        if(type.equals("movie")){
-            movieAdapter.filterList(movies);
-            //collapse horizontal RV in case it was shown previously
-//            categoryMoviesAdapter.filterList(new ArrayList<>());
-//            category_title.setVisibility(View.GONE);
-//        }else{
-//            category_title.setVisibility(View.VISIBLE);
-//            String text = "Category  " +'"'+ category_type + '"';
-//            category_title.setText(text);
-//            categoryMoviesAdapter.filterList(movies);
-//        }
+            movieAdapter.filterList(movies,false,null);
+
         if(movies.size()>0){
             return true;
         }
@@ -313,13 +306,8 @@ public class SearchActivity extends AbstractActivity {
             }
 
         }
-        //Add the requested/filtered Movies to recyclerView through the MovieAdapter
-//            TextView category_title = findViewById(R.id.search_category_title);
-//            category_title.setVisibility(View.VISIBLE);
-//            String text = "Category  " +'"'+ category_type + '"';
-//            category_title.setText(text);
-            movieAdapter.filterList(movies);
-//        }
+//            movieAdapter.notifyItemInserted(0);
+            movieAdapter.filterList(movies,true,category_type);
 
 
     }
@@ -328,7 +316,7 @@ public class SearchActivity extends AbstractActivity {
         Map<String,Integer> api_movie_categories = new HashMap<>();
 
         // enter name/url pair
-        api_movie_categories.put("id", 28);
+        api_movie_categories.put("Action", 28);
         api_movie_categories.put("Adventure", 12);
         api_movie_categories.put("Animation", 16);
         api_movie_categories.put("Comedy", 35);
@@ -351,4 +339,19 @@ public class SearchActivity extends AbstractActivity {
         return api_movie_categories;
     }
 
+    @SuppressLint("ClickableViewAccessibility")
+    private void hideKeyboardOnScroll(RecyclerView recyclerView){
+
+        recyclerView.setOnTouchListener(new View.OnTouchListener() {
+
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+
+                return false;
+            }
+        });
+    }
 }

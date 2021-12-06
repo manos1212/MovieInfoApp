@@ -100,10 +100,10 @@
 <!--        android:orientation="horizontal"-->
 <!--        tools:listitem="@layout/holder_single_movie"-->
 <!--        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>-->
-
+<!--    android:layout_marginStart="5dp"-->
     <TextView
         android:padding="5dp"
-        android:layout_marginStart="8dp"
+
         android:id="@+id/search_movie_list_title"
         android:layout_width="wrap_content"
         tools:text="Horror"
@@ -111,14 +111,12 @@
         android:elevation="11dp"
         android:textColor="@color/white"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toTopOf="@+id/searchForMovies_recycler_view"
+
         app:layout_constraintTop_toBottomOf="@id/textField_Search_layout"
         app:layout_constraintStart_toStartOf="@+id/searchForMovies_recycler_view" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/searchForMovies_recycler_view"
-        android:layout_marginTop="6dp"
-
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintEnd_toEndOf="parent"

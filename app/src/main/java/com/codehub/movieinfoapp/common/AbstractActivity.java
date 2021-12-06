@@ -34,7 +34,6 @@ public abstract class AbstractActivity extends AppCompatActivity {
         super.onPostResume();
         startOperations();
     }
-
     @Override
     protected void onPause() {
         stopOperations();
