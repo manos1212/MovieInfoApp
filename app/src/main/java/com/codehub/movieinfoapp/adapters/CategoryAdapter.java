@@ -39,6 +39,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
         holder.recyclerView.setAdapter(new MovieAdapter(context, categories.get(position).movies,false));
         holder.recyclerView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
         holder.recyclerView.setHasFixedSize(true);
+
         holder.categoryName.setText(categories.get(position).categoryName);
     }
 
@@ -50,11 +51,14 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
     public class CategoryViewHolder extends RecyclerView.ViewHolder {
         RecyclerView recyclerView;
         TextView categoryName;
+        TextView movies_word_tag;
 
         public CategoryViewHolder(View itemView) {
             super(itemView);
             recyclerView = (RecyclerView) itemView.findViewById(R.id.movies_recycler_view);
             categoryName = (TextView) itemView.findViewById(R.id.category_name_textView);
+            movies_word_tag = (TextView) itemView.findViewById(R.id.movieList_results);
+            movies_word_tag.setVisibility(View.GONE);
         }
     }
 }

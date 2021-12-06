@@ -2,6 +2,8 @@ package com.codehub.movieinfoapp.ui;
 
 import android.content.Intent;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -23,6 +25,7 @@ public class MainActivity extends AbstractActivity {
     private CategoryAdapter categoryAdapter;
     private ArrayList<MoviesCategory> categories;
     MaterialToolbar topAppBar;
+    private TextView toolBarTitle;
 
     @Override
     public int getLayoutRes() {
@@ -32,13 +35,19 @@ public class MainActivity extends AbstractActivity {
     @Override
     public void startOperations() {
         category_recyclerView = findViewById(R.id.category_recyclerView);
+        toolBarTitle = findViewById(R.id.toolbar_title);
         topAppBar = findViewById(R.id.topAppBar);
         categories=prepareData();
         categoryAdapter = new CategoryAdapter(categories,MainActivity.this);
         LinearLayoutManager manager = new LinearLayoutManager(MainActivity.this);
         category_recyclerView.setLayoutManager(manager);
         category_recyclerView.setAdapter(categoryAdapter);
-
+        toolBarTitle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                category_recyclerView.getLayoutManager().scrollToPosition(0);
+            }
+        });
 
 
         topAppBar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {

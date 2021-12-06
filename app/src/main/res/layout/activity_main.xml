@@ -21,11 +21,22 @@
         android:id="@+id/topAppBar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        app:title="MoviePedia"
+
         app:menu="@menu/top_app_bar"
         android:theme="@style/ActionBarStyle"
         style="@style/ActionBarStyle"
-        app:titleTextAppearance="@style/ActionBarTitle" />
+        app:titleTextAppearance="@style/ActionBarTitle" >
+<!--        app:title="MoviePedia"-->
+
+        <TextView
+            android:id="@+id/toolbar_title"
+            android:gravity="start"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="MoviePedia"
+            android:textAppearance="@style/ActionBarTitle"
+            />
+    </com.google.android.material.appbar.MaterialToolbar>
 <!--    style="@style/Widget.MaterialComponents.Toolbar.Primary"-->
 
     </com.google.android.material.appbar.AppBarLayout>
