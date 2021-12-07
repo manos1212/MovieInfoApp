@@ -70,6 +70,7 @@ public class SearchActivity extends AbstractActivity {
         searchText = findViewById(R.id.textField_Search);
         back_btn = findViewById(R.id.back_btn);
         movie_list_title  = findViewById(R.id.search_movie_list_title);
+        searchText.requestFocus();
 //        category_title = findViewById(R.id.search_category_title);
         back_btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -109,7 +110,6 @@ public class SearchActivity extends AbstractActivity {
         movieAdapter = new RequestedMoviesAdapter(SearchActivity.this,movies,categoryMovies,category_type);
         LinearLayoutManager manager = new LinearLayoutManager(SearchActivity.this);
         search_movies_rv.setLayoutManager(manager);
-
         search_movies_rv.setAdapter(movieAdapter);
 
         hideKeyboardOnScroll(search_movies_rv);

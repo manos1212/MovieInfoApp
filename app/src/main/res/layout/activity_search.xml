@@ -26,6 +26,7 @@
         <!--        app:startIconDrawable="@drawable/ic_baseline_email_24"-->
 
         <com.google.android.material.textfield.TextInputEditText
+            android:focusableInTouchMode="true"
             android:textCursorDrawable="@drawable/search_bar_text_cursor_shape"
             android:textColor="@color/white"
             android:id="@+id/textField_Search"
@@ -118,7 +119,7 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/searchForMovies_recycler_view"
         android:layout_width="match_parent"
-        android:overScrollMode="never"
+        android:scrollbarThumbVertical="@color/white"
         android:scrollbars="vertical"
         android:layout_height="0dp"
         app:layout_constraintEnd_toEndOf="parent"
