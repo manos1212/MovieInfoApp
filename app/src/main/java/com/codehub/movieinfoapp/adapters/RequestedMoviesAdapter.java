@@ -29,7 +29,6 @@ public class RequestedMoviesAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     private static final String base_url = "https://image.tmdb.org/t/p/w500";
 
     public RequestedMoviesAdapter(Context context,ArrayList<Movie> requestedMovies,ArrayList<Movie> requestedCategoryMovies,String categoryName) {
-
         this.requestedMovies = requestedMovies;
         this.categoryName = categoryName;
         this.requestedCategoryMovies = requestedCategoryMovies;
@@ -101,7 +100,7 @@ public class RequestedMoviesAdapter extends RecyclerView.Adapter<RecyclerView.Vi
 
             ((CategoryMovieViewHolder)holder).recyclerView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
 //            ((CategoryMovieViewHolder)holder).recyclerView.setHasFixedSize(true);
-            ((CategoryMovieViewHolder)holder).recyclerView.setAdapter(new MovieAdapter(context, requestedCategoryMovies,true));
+            ((CategoryMovieViewHolder)holder).recyclerView.setAdapter(new MovieAdapter(context, requestedCategoryMovies));
 //            ((CategoryMovieViewHolder)holder).categoryName.setText(categories.get(position).categoryName);
         }
 

@@ -1,9 +1,13 @@
 package com.codehub.movieinfoapp.common;
 
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.codehub.movieinfoapp.R;
 
 public abstract class AbstractActivity extends AppCompatActivity {
 
@@ -28,7 +32,12 @@ public abstract class AbstractActivity extends AppCompatActivity {
     protected void onPostCreate(@Nullable Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
     }
-
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.top_app_bar, menu);
+        return true;
+    }
     @Override
     protected void onPostResume() {
         super.onPostResume();

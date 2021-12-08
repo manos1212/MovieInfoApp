@@ -4,6 +4,24 @@ public class Movie {
     public int id;
     public String movieName;
     public String movieThumbnailUrl;
+    public String movieDescription;
+    public Double movieRating;
+
+    public String getMovieDescription() {
+        return movieDescription;
+    }
+
+    public void setMovieDescription(String movieDescription) {
+        this.movieDescription = movieDescription;
+    }
+
+    public double getMovieRating() {
+        return movieRating;
+    }
+
+    public void setMovieRating(Double movieRating) {
+        this.movieRating = movieRating;
+    }
 
     public int getId() {
         return id;

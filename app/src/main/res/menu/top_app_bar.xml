@@ -7,12 +7,12 @@
         android:icon="@drawable/ic_round_search_24"
         android:title="Search"
         android:contentDescription="SearchForMovies"
-        app:showAsAction="ifRoom" />
-    <item
-        android:id="@+id/hamburger"
-        android:icon="@drawable/ic_baseline_menu_24"
-        android:title="Menu"
-        android:contentDescription="MenuDashBoard"
         app:showAsAction="always" />
+<!--    <item-->
+<!--        android:id="@+id/hamburger"-->
+<!--        android:icon="@drawable/ic_baseline_menu_24"-->
+<!--        android:title="Menu"-->
+<!--        android:contentDescription="MenuDashBoard"-->
+<!--        app:showAsAction="always" />-->
 
 </menu>

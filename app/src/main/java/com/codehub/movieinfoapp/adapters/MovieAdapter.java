@@ -17,14 +17,12 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 
 public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHolder> {
-    private boolean isApi;
     private Context context;
     private ArrayList<Movie> movies;
     private LayoutInflater inflater;
     private static final String base_url = "https://image.tmdb.org/t/p/w500";
 
-    public MovieAdapter(Context context, ArrayList<Movie> movies, boolean isApi) {
-        this.isApi = isApi;
+    public MovieAdapter(Context context, ArrayList<Movie> movies) {
         this.context = context;
         this.movies = movies;
         this.inflater = LayoutInflater.from(context);
@@ -43,7 +41,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
         Movie movie = movies.get(position);
         holder.movieName_textView.setText("");
         if(movie.movieThumbnailUrl!=null) {
-            Picasso.get().load(isApi? base_url + movie.movieThumbnailUrl:movie.movieThumbnailUrl).into(holder.movieThumbnail);
+            Picasso.get().load(base_url + movie.movieThumbnailUrl).into(holder.movieThumbnail);
         }else{
             Picasso.get().load(R.drawable.image_place_holder).into(holder.movieThumbnail);
         }

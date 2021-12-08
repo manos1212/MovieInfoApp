@@ -15,8 +15,6 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -35,10 +33,6 @@ import com.codehub.movieinfoapp.models.Movie;
 import com.codehub.movieinfoapp.rest_api.search_activity.json.JsonResponse;
 import com.codehub.movieinfoapp.rest_api.search_activity.json.JsonResultsResponse;
 import com.google.gson.Gson;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -294,7 +288,7 @@ public class SearchActivity extends AbstractActivity {
                 Movie movie = new Movie();
                 movie.setMovieName(results.get(i).getTitle());
 //                if(type.equals("movie")){
-                movie.setMovieName(results.get(i).getTitle());
+//                movie.setMovieName(results.get(i).getTitle());
 //                }else{
 //                    movie.setMovieName("");
 //                }

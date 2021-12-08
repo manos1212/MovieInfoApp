@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.codehub.movieinfoapp.R;
+import com.codehub.movieinfoapp.models.Movie;
 import com.codehub.movieinfoapp.models.MoviesCategory;
 
 import java.util.ArrayList;
@@ -36,7 +37,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
 
     @Override
     public void onBindViewHolder(CategoryViewHolder holder, int position) {
-        holder.recyclerView.setAdapter(new MovieAdapter(context, categories.get(position).movies,false));
+        holder.recyclerView.setAdapter(new MovieAdapter(context, categories.get(position).movies));
         holder.recyclerView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
         holder.recyclerView.setHasFixedSize(true);
 
@@ -60,5 +61,10 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
             movies_word_tag = (TextView) itemView.findViewById(R.id.movieList_results);
             movies_word_tag.setVisibility(View.GONE);
         }
+    }
+
+    public  void updateUi(ArrayList<MoviesCategory> categoriesList){
+        categories=categoriesList;
+        notifyDataSetChanged();
     }
 }

@@ -8,6 +8,8 @@ import androidx.viewpager2.widget.ViewPager2;
 import com.codehub.movieinfoapp.common.AbstractActivity;
 import com.codehub.movieinfoapp.R;
 import com.codehub.movieinfoapp.adapters.VPAdapter;
+import com.codehub.movieinfoapp.ui.fragments.SignInFragment;
+import com.codehub.movieinfoapp.ui.fragments.SignUpFragment;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
@@ -27,7 +29,6 @@ public class LoginActivity extends AbstractActivity {
 
     @Override
     public void startOperations() {
-
 //                LoginActivity .this.getWindow().setSoftInputMode(
 //                WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
         app_logo = findViewById(R.id.app_logo_icon);

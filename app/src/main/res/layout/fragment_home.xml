@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.fragments.HomeFragment"
+    android:background="@color/black">
+
+<!--    <androidx.coordinatorlayout.widget.CoordinatorLayout-->
+<!--    android:layout_width="match_parent"-->
+<!--    android:layout_height="match_parent">-->
+
+<!--    <com.google.android.material.appbar.AppBarLayout-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        app:liftOnScroll="false">-->
+
+<!--    <com.google.android.material.appbar.MaterialToolbar-->
+<!--        android:background="@color/black"-->
+<!--        android:id="@+id/topAppBar"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="?attr/actionBarSize"-->
+
+<!--        app:menu="@menu/top_app_bar"-->
+<!--        android:theme="@style/ActionBarStyle"-->
+<!--        style="@style/ActionBarStyle"-->
+<!--        app:titleTextAppearance="@style/ActionBarTitle" >-->
+<!--&lt;!&ndash;        app:title="MoviePedia"&ndash;&gt;-->
+
+<!--        <TextView-->
+<!--            android:id="@+id/toolbar_title"-->
+<!--            android:gravity="start"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:text="MoviePedia"-->
+<!--            android:textAppearance="@style/ActionBarTitle"-->
+<!--            />-->
+<!--    </com.google.android.material.appbar.MaterialToolbar>-->
+<!--&lt;!&ndash;    style="@style/Widget.MaterialComponents.Toolbar.Primary"&ndash;&gt;-->
+
+<!--    </com.google.android.material.appbar.AppBarLayout>-->
+
+<!--    app:shimmer_duration="1100"-->
+
+    <com.facebook.shimmer.ShimmerFrameLayout
+        android:id="@+id/home_shimmer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <include layout="@layout/shimmer_home"/>
+            <include layout="@layout/shimmer_home"/>
+            <include layout="@layout/shimmer_home"/>
+            <include layout="@layout/shimmer_home"/>
+            <include layout="@layout/shimmer_home"/>
+            <include layout="@layout/shimmer_home"/>
+            <include layout="@layout/shimmer_home"/>
+            <include layout="@layout/shimmer_home"/>
+            <include layout="@layout/shimmer_home"/>
+            <include layout="@layout/shimmer_home"/>
+            <include layout="@layout/shimmer_home"/>
+            <include layout="@layout/shimmer_home"/>
+            <include layout="@layout/shimmer_home"/>
+            <include layout="@layout/shimmer_home"/>
+            <include layout="@layout/shimmer_home"/>
+
+
+        </LinearLayout>
+
+    </com.facebook.shimmer.ShimmerFrameLayout>
+    <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/category_recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+
+            tools:layout_editor_absoluteX="0dp"
+            tools:layout_editor_absoluteY="-125dp"
+            tools:listitem="@layout/holder_single_movie_category" />
+
+<!--    </androidx.coordinatorlayout.widget.CoordinatorLayout>-->
+
+</androidx.constraintlayout.widget.ConstraintLayout>

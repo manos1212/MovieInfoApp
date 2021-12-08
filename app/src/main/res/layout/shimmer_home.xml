@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/category_horizontal_list_layout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+
+
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <View
+        android:id="@+id/title_box"
+        android:layout_marginTop="12dp"
+        android:layout_marginStart="4dp"
+        android:layout_width="140dp"
+        android:layout_height="20dp"
+        android:background="@drawable/shimmer_title_shape"
+        app:layout_constraintStart_toStartOf="@id/linear_layout"
+        app:layout_constraintTop_toTopOf="parent"
+
+        />
+
+    <LinearLayout
+        app:layout_constraintTop_toBottomOf="@+id/title_box"
+        android:id="@+id/linear_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <include layout="@layout/shimmer_card"/>
+        <include layout="@layout/shimmer_card"/>
+        <include layout="@layout/shimmer_card"/>
+        <include layout="@layout/shimmer_card"/>
+        <include layout="@layout/shimmer_card"/>
+        <include layout="@layout/shimmer_card"/>
+
+
+
+    </LinearLayout>
+<!--    </com.facebook.shimmer.ShimmerFrameLayout>-->
+
+
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
