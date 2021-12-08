@@ -23,8 +23,9 @@ public class MainActivity extends AbstractActivity {
     private Fragment favouritesFragment = new FavouritesFragment();
     private Fragment profileFragment = new ProfileFragment();
     private BottomNavigationView bottomNavigationView;
-    private int selectedFragment = R.id.home;
-            MaterialToolbar topAppBar;
+    private FragmentManager fragmentManager = getSupportFragmentManager();
+    private Fragment activeFragment = homeFragment;
+    MaterialToolbar topAppBar;
     @Override
     public int getLayoutRes() {
         return R.layout.activity_main;
@@ -49,36 +50,66 @@ public class MainActivity extends AbstractActivity {
         });
 
     bottomNavigationView = findViewById(R.id.bottom_nav);
-    bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
-        @SuppressLint("NonConstantResourceId")
-        @Override
-        public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-            Fragment fragment;
-            switch (menuItem.getItemId()){
-                case R.id.home:
-                    fragment = homeFragment;
-                    selectedFragment = R.id.home;
-                    break;
-                    case R.id.favourites:
-                    fragment = favouritesFragment;
-                        selectedFragment = R.id.favourites;
-                    break;
-                    case R.id.profile:
-                    fragment = profileFragment;
-                    selectedFragment = R.id.profile;
-                    break;
-                default:
-                    return false;
-
-
-            }
-            getSupportFragmentManager().beginTransaction().replace(R.id.main_container,fragment).commit();
-            return true;
-        }
-
-    });
-    bottomNavigationView.setSelectedItemId(selectedFragment);
+    bottomNavigationView.setOnItemSelectedListener(mOnNavigationItemSelectedListener) ;
+    if(!profileFragment.isAdded()) {
+        fragmentManager.beginTransaction().add(R.id.main_container, profileFragment, "3").hide(profileFragment).commit();
+        fragmentManager.beginTransaction().add(R.id.main_container, favouritesFragment, "2").hide(favouritesFragment).commit();
+        fragmentManager.beginTransaction().add(R.id.main_container, homeFragment, "1").commit();
     }
+//    {
+//        @SuppressLint("NonConstantResourceId")
+//        @Override
+//        public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+//            Fragment fragment;
+//            switch (menuItem.getItemId()){
+//                case R.id.home:
+//                    fragment = homeFragment;
+//                    selectedFragment = R.id.home;
+//                    break;
+//                    case R.id.favourites:
+//                    fragment = favouritesFragment;
+//                        selectedFragment = R.id.favourites;
+//                    break;
+//                    case R.id.profile:
+//                    fragment = profileFragment;
+//                    selectedFragment = R.id.profile;
+//                    break;
+//                default:
+//                    return false;
+//
+//
+//            }
+//            getSupportFragmentManager().beginTransaction().replace(R.id.main_container,fragment).commit();
+//            return true;
+//        }
+//
+//    });
+//    bottomNavigationView.setSelectedItemId(selectedFragment);
+    }
+
+    private BottomNavigationView.OnItemSelectedListener mOnNavigationItemSelectedListener
+            = new NavigationBarView.OnItemSelectedListener() {
+
+        @Override
+        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+            if(item.getItemId()==R.id.home){
+                fragmentManager.beginTransaction().hide(activeFragment).show(homeFragment).commit();
+                activeFragment = homeFragment;
+                return true;
+
+            }else if(item.getItemId()==R.id.favourites){
+                fragmentManager.beginTransaction().hide(activeFragment).show(favouritesFragment).commit();
+                activeFragment = favouritesFragment;
+                return true;
+            }else if(item.getItemId()==R.id.profile){
+                fragmentManager.beginTransaction().hide(activeFragment).show(profileFragment).commit();
+                activeFragment = profileFragment;
+                return true;
+            }
+            return false;
+        }
+    };
+
 
     @Override
     public void stopOperations() {

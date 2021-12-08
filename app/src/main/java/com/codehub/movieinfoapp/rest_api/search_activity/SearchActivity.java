@@ -51,6 +51,9 @@ public class SearchActivity extends AbstractActivity {
     Map<String,Integer> api_movie_categories;
     String category_type;
     TextView movie_list_title;
+    private Handler handler;
+    Runnable workRunnable;
+    private String latestQuery = "";
 
     @Override
     public int getLayoutRes() {
@@ -60,6 +63,7 @@ public class SearchActivity extends AbstractActivity {
     @Override
     public void startOperations() {
 
+        handler= new Handler(Looper.getMainLooper());
         api_movie_categories = setCategories();
         searchText = findViewById(R.id.textField_Search);
         back_btn = findViewById(R.id.back_btn);
@@ -82,23 +86,16 @@ public class SearchActivity extends AbstractActivity {
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
-
-
             }
-            final Handler handler = new Handler(Looper.getMainLooper() /*UI thread*/);
-            Runnable workRunnable;
+
 
 
 
             @Override
             public void afterTextChanged(Editable editable) {
-                handler.removeCallbacks(workRunnable);
-                workRunnable = () -> applyChecks(editable.toString());
-                handler.postDelayed(workRunnable, 300 /*delay*/);
-
+               getUserInput(editable.toString());
             }
         });
-
 
         search_movies_rv = findViewById(R.id.searchForMovies_recycler_view);
         movieAdapter = new RequestedMoviesAdapter(SearchActivity.this,movies,categoryMovies,category_type);
@@ -107,12 +104,18 @@ public class SearchActivity extends AbstractActivity {
         search_movies_rv.setAdapter(movieAdapter);
 
         hideKeyboardOnScroll(search_movies_rv);
+        getUserInput(latestQuery);
+    }
 
+    private void getUserInput(String query){
+        handler.removeCallbacks(workRunnable);
+        workRunnable = () -> applyChecks(query);
+        handler.postDelayed(workRunnable, 250 /*delay*/);
+        latestQuery = query;
     }
 
     @Override
     public void stopOperations() {
-
     }
 
     private void applyChecks(String str) {

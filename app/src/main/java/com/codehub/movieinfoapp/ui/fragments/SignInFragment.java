@@ -45,6 +45,10 @@ public class SignInFragment extends AbstractFragment {
             public void onClick(View view) {
                 Intent intent = new Intent(getContext(), MainActivity.class);
                 startActivity(intent);
+                if(getActivity()!=null){
+                    getActivity().finish();
+                }
+
             }
         });
     }
