@@ -1,6 +1,7 @@
 package com.codehub.movieinfoapp;
 
-import android.graphics.drawable.Drawable;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -9,11 +10,10 @@ import com.codehub.movieinfoapp.adapters.CategoryAdapter;
 import com.codehub.movieinfoapp.models.Movie;
 import com.codehub.movieinfoapp.models.MoviesCategory;
 
-import java.io.InputStream;
-import java.net.URL;
 import java.util.ArrayList;
 
 public class MainActivity extends AbstractActivity {
+
     private RecyclerView category_recyclerView;
     private CategoryAdapter categoryAdapter;
     private ArrayList<MoviesCategory> categories;
@@ -27,7 +27,7 @@ public class MainActivity extends AbstractActivity {
     public void startOperations() {
 
         category_recyclerView = findViewById(R.id.category_recyclerView);
-        categories=prepareData();
+        categories = prepareData();
         categoryAdapter = new CategoryAdapter(categories,MainActivity.this);
         LinearLayoutManager manager = new LinearLayoutManager(MainActivity.this);
         category_recyclerView.setLayoutManager(manager);
@@ -36,6 +36,30 @@ public class MainActivity extends AbstractActivity {
 
     @Override
     public void stopOperations() {
+
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
+            while(getSupportFragmentManager().getBackStackEntryCount() != 0) {
+                super.onBackPressed();
+            }
+        } else {
+            new AlertDialog.Builder(this)
+            .setIcon(android.R.drawable.ic_dialog_alert)
+            .setTitle("Exit Application")
+            .setMessage("Are you sure you want to exit?")
+            .setPositiveButton("Yes", new DialogInterface.OnClickListener()
+            {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    moveTaskToBack(true);
+                }
+            })
+            .setNegativeButton("No", null)
+            .show();
+        }
 
     }
 
