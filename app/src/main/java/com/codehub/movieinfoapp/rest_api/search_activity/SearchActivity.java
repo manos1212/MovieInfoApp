@@ -258,12 +258,10 @@ public class SearchActivity extends AbstractActivity {
 //                JSONObject object = jsonArray.getJSONObject(i);
                 Movie movie = new Movie();
                 movie.setMovieName(results.get(i).getTitle());
-//                if(type.equals("movie")){
-                    movie.setMovieName(results.get(i).getTitle());
-//                }else{
-//                    movie.setMovieName("");
-//                }
                 movie.setMovieThumbnailUrl(results.get(i).getPoster_path());
+                movie.setId(results.get(i).getId());
+                movie.setMovieDescription(results.get(i).getOverview());
+                movie.setMovieRating(results.get(i).getVote_average());
                 movies.add(movie);
 
             } catch (Exception e) {
@@ -273,12 +271,7 @@ public class SearchActivity extends AbstractActivity {
         }
             movieAdapter.filterList(movies,false,null);
 
-        if(movies.size()>0){
-            return true;
-        }
-        else{
-            return false;
-        }
+        return movies.size() > 0;
     }
 
 
@@ -290,12 +283,10 @@ public class SearchActivity extends AbstractActivity {
 //                JSONObject object = jsonArray.getJSONObject(i);
                 Movie movie = new Movie();
                 movie.setMovieName(results.get(i).getTitle());
-//                if(type.equals("movie")){
-//                movie.setMovieName(results.get(i).getTitle());
-//                }else{
-//                    movie.setMovieName("");
-//                }
+                movie.setId(results.get(i).getId());
                 movie.setMovieThumbnailUrl(results.get(i).getPoster_path());
+                movie.setMovieDescription(results.get(i).getOverview());
+                movie.setMovieRating(results.get(i).getVote_average());
                 movies.add(movie);
 
             } catch (Exception e) {
