@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">MovieInfoApp</string>
+    <string name="app_name">MoviePedia</string>
     <string name="google_icon">Google Icon</string>
     <string name="facebook_icon">Facebook Icon</string>
     <string name="sign_in_tab">Sign In</string>

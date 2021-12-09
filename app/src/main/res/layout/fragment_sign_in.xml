@@ -30,6 +30,7 @@
         <!--        app:startIconDrawable="@drawable/ic_baseline_email_24"-->
 
         <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/signIn_email_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:backgroundTint="#F1EEEE"
@@ -64,6 +65,7 @@
         <!--        app:startIconDrawable="@drawable/ic_baseline_email_24"-->
 
         <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/signIn_password_text"
             android:inputType="textPassword"
             android:paddingStart="20dp"
             android:backgroundTint="#F1EEEE"

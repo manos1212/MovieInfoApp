@@ -12,7 +12,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MovieInfoApp">
-        <activity android:name=".MainActivity"></activity>
+        <activity android:name=".MainActivity">
+
+        </activity>
         <activity
             android:name=".rest_api.search_activity.SearchActivity"
             android:configChanges="orientation|screenSize" />
@@ -22,15 +24,6 @@
             android:exported="true"
             android:label="MoviePedia"
             android:windowSoftInputMode="adjustPan">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-        <activity
-            android:name=".ui.fragments.HomeFragment"
-            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
