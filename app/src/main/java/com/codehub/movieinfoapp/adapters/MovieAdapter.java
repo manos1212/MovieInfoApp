@@ -4,14 +4,19 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.codehub.movieinfoapp.R;
 import com.codehub.movieinfoapp.models.Movie;
+import com.codehub.movieinfoapp.ui.fragments.MovieInfoFragment;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -20,7 +25,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
     private Context context;
     private ArrayList<Movie> movies;
     private LayoutInflater inflater;
-    private static final String base_url = "https://image.tmdb.org/t/p/w500";
+    private String baseURL = "https://image.tmdb.org/t/p/w500";
 
     public MovieAdapter(Context context, ArrayList<Movie> movies) {
         this.context = context;
@@ -39,12 +44,43 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
     @Override
     public void onBindViewHolder(MovieViewHolder holder, int position) {
         Movie movie = movies.get(position);
-        holder.movieName_textView.setText("");
+
         if(movie.movieThumbnailUrl!=null) {
-            Picasso.get().load(base_url + movie.movieThumbnailUrl).into(holder.movieThumbnail);
-        }else{
+            Picasso.get().load(baseURL + movie.movieThumbnailUrl).into(holder.movieThumbnail);
+        } else {
             Picasso.get().load(R.drawable.image_place_holder).into(holder.movieThumbnail);
         }
+
+        holder.movieName_textView.setText("");
+        holder.movieThumbnail.setOnClickListener(new View.OnClickListener()
+             {
+                 @Override
+                 public void onClick(View v) {
+
+                     System.out.println("position clicked: " + holder.getAdapterPosition());
+
+                     AppCompatActivity activity = (AppCompatActivity)v.getContext();
+                     MovieInfoFragment fragment = new MovieInfoFragment();
+                     FragmentTransaction transaction = activity.getSupportFragmentManager().beginTransaction();
+
+                     transaction.addToBackStack("MovieInfoFragment");
+                     transaction.replace(R.id.fragmentContainer, MovieInfoFragment.newInstance(
+                         movie.id,
+                        baseURL +movie.movieThumbnailUrl,
+                         movie.movieRating,
+                         false,
+                         movie.movieName,
+                         movie.movieDescription
+                     ),"MovieInfoFragment").commit();
+
+                     System.out.println("stack count" + activity.getSupportFragmentManager().getBackStackEntryCount());
+
+                     FrameLayout fragmentContainer = activity.findViewById(R.id.fragmentContainer);
+                     fragmentContainer.setTranslationY(1800);
+                     fragmentContainer.animate().translationY(0).alpha(1).setDuration(250).setStartDelay(100).start();
+                 }
+             }
+        );
     }
 
     @Override
@@ -63,8 +99,8 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
 
         public MovieViewHolder(View itemView) {
             super(itemView);
-            movieName_textView = (TextView) itemView.findViewById(R.id.movieName_textView);
-            movieThumbnail = (ImageView) itemView.findViewById(R.id.movie_thumbnail);
+            movieName_textView = itemView.findViewById(R.id.movieName_textView);
+            movieThumbnail = itemView.findViewById(R.id.movie_thumbnail);
         }
     }
 }

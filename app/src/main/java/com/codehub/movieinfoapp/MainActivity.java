@@ -6,8 +6,13 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.codehub.movieinfoapp.common.AbstractActivity;
 import com.codehub.movieinfoapp.rest_api.search_activity.SearchActivity;
@@ -25,6 +30,7 @@ public class MainActivity extends AbstractActivity {
     private BottomNavigationView bottomNavigationView;
     private FragmentManager fragmentManager = getSupportFragmentManager();
     private Fragment activeFragment = homeFragment;
+    private boolean doubleBackToExitPressedOnce = false;
     MaterialToolbar topAppBar;
     @Override
     public int getLayoutRes() {
@@ -110,9 +116,47 @@ public class MainActivity extends AbstractActivity {
         }
     };
 
-
     @Override
     public void stopOperations() {
 
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
+            while(getSupportFragmentManager().getBackStackEntryCount() != 0) {
+                super.onBackPressed();
+            }
+        } else {
+//            new AlertDialog.Builder(this)
+//                    .setIcon(android.R.drawable.ic_dialog_alert)
+//                    .setTitle("Exit Application")
+//                    .setMessage("Are you sure you want to exit?")
+//                    .setPositiveButton("Yes", new DialogInterface.OnClickListener()
+//                    {
+//                        @Override
+//                        public void onClick(DialogInterface dialog, int which) {
+//                          moveTaskToBack(true);
+//                        }
+//                    })
+//                    .setNegativeButton("No", null)
+//                    .show();
+
+            if (doubleBackToExitPressedOnce) {
+                super.onBackPressed();
+                return;
+            }
+
+            this.doubleBackToExitPressedOnce = true;
+            Toast.makeText(this, "Please click BACK again to exit", Toast.LENGTH_SHORT).show();
+
+            new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+
+                @Override public void run() {
+                    doubleBackToExitPressedOnce=false;
+                }
+            }, 2000);
+
+        }
     }
 }
