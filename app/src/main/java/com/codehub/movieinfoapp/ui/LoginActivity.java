@@ -1,10 +1,15 @@
 package com.codehub.movieinfoapp.ui;
 
+import android.content.Intent;
+import android.view.View;
+import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.viewpager2.widget.ViewPager2;
 
+import com.codehub.movieinfoapp.MainActivity;
 import com.codehub.movieinfoapp.common.AbstractActivity;
 import com.codehub.movieinfoapp.R;
 import com.codehub.movieinfoapp.adapters.VPAdapter;
@@ -13,14 +18,18 @@ import com.codehub.movieinfoapp.ui.fragments.SignUpFragment;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class LoginActivity extends AbstractActivity {
     private TabLayout tabLayout;
-    private ViewPager2 viewPager;
+    public static ViewPager2 viewPager;
+    private FirebaseAuth mAuth;
     private final String[] namesList ={"Sign In","Sign Up"};
     FloatingActionButton  google_btn,facebook_btn;
     ImageView app_logo;
     TextView welcome_text;
+    public ProgressBar circular_indicator;
 
     @Override
     public int getLayoutRes() {
@@ -29,11 +38,25 @@ public class LoginActivity extends AbstractActivity {
 
     @Override
     public void startOperations() {
-//                LoginActivity .this.getWindow().setSoftInputMode(
+        mAuth = FirebaseAuth.getInstance();
+
+        // Check if user is signed in (non-null) and update UI accordingly.
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        if(currentUser != null){
+            if(currentUser.isEmailVerified()){
+                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                startActivity(intent);
+                finish();
+            }
+
+        }
+
+        //                LoginActivity .this.getWindow().setSoftInputMode(
 //                WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
         app_logo = findViewById(R.id.app_logo_icon);
         welcome_text = findViewById(R.id.login_title);
         tabLayout = findViewById(R.id.email_Tabs);
+        circular_indicator = findViewById(R.id.login_progress_indicator);
         viewPager = findViewById(R.id.Vpager);
         facebook_btn = findViewById(R.id.facebook_fab);
         google_btn = findViewById(R.id.google_fab);
@@ -63,5 +86,18 @@ public class LoginActivity extends AbstractActivity {
     @Override
     public void stopOperations() {
     }
+
+
+
+    public void showIndicator(){
+        circular_indicator.setVisibility(View.VISIBLE);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+    }
+    public void hideIndicator() {
+        circular_indicator.setVisibility(View.GONE);
+        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+    }
+
 
 }

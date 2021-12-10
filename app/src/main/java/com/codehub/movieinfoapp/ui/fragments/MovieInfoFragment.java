@@ -3,15 +3,40 @@ package com.codehub.movieinfoapp.ui.fragments;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import androidx.annotation.NonNull;
 
 import com.codehub.movieinfoapp.R;
 import com.codehub.movieinfoapp.common.AbstractFragment;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.SetOptions;
 import com.squareup.picasso.Picasso;
+
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import static android.service.controls.ControlsProviderService.TAG;
 
 public class MovieInfoFragment extends AbstractFragment{
 
@@ -23,6 +48,7 @@ public class MovieInfoFragment extends AbstractFragment{
     private ImageView movieShare;
     private TextView movieTitle;
     private TextView movieDescription;
+    private FirebaseFirestore fireStoreDb;
     private String nullURL = "https://image.tmdb.org/t/p/w500null";
 
     private boolean favourite = false;
@@ -56,6 +82,7 @@ public class MovieInfoFragment extends AbstractFragment{
     @Override
     public void startOperations(View view) {
 
+        fireStoreDb = FirebaseFirestore.getInstance();
         movieBack = view.findViewById(R.id.back_fab);
         movieImage = view.findViewById(R.id.movie_image);
         movieRating = view.findViewById(R.id.movie_rating);
@@ -64,6 +91,7 @@ public class MovieInfoFragment extends AbstractFragment{
         movieTitle = view.findViewById(R.id.movie_title);
         movieDescription = view.findViewById(R.id.movie_description);
 
+        checkIfFavourite();
         InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
 
@@ -80,7 +108,7 @@ public class MovieInfoFragment extends AbstractFragment{
 
             movieRating.setText(String.valueOf(bundle.getDouble("movie_rating")));
 
-            if(bundle.getBoolean("movie_favourite")) {
+            if(favourite) {
                 movieFavourite.setImageResource(R.drawable.ic_baseline_favorite_filled_24);
             } else {
                 movieFavourite.setImageResource(R.drawable.ic_baseline_favorite_no_fill_24);
@@ -100,20 +128,13 @@ public class MovieInfoFragment extends AbstractFragment{
         movieFavourite.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (favourite) {
-                    movieFavourite.setImageResource(R.drawable.ic_baseline_favorite_no_fill_24);
-                    favourite = false;
-                } else {
-                    movieFavourite.setImageResource(R.drawable.ic_baseline_favorite_filled_24);
-                    favourite = true;
-                }
+                addOrRemoveFromFavourites();
             }
         });
 
         movieShare.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 Intent sendIntent = new Intent();
                 sendIntent.setAction(Intent.ACTION_SEND);
                 sendIntent.putExtra(Intent.EXTRA_TEXT,"https://www.themoviedb.org/movie/" + movieID);
@@ -127,6 +148,59 @@ public class MovieInfoFragment extends AbstractFragment{
 
     @Override
     public void stopOperations() {
+
+    }
+
+    public void checkIfFavourite(){
+        System.out.println("DsfsdfsdfsdfsdfdsF"+FirebaseAuth.getInstance().getUid());
+        // Add a new document with a generated ID
+        DocumentReference docRef = fireStoreDb.collection("users").document(FirebaseAuth.getInstance().getCurrentUser().getUid());
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        if(document.get("favourites")!=null){
+                            List<Long> favourites = (List<Long>) document.get("favourites");
+                            System.out.println("!!!!!!!!!!!"+favourites);
+                            for(long i:favourites){
+                                if(i==movieID){
+                                    movieFavourite.setImageResource(R.drawable.ic_baseline_favorite_filled_24);
+                                    favourite = true;
+                                    break;
+                                }else{
+                                    movieFavourite.setImageResource(R.drawable.ic_baseline_favorite_no_fill_24);
+                                }
+                            }
+                        }
+                        Log.d(TAG, "DocumentSnapshot data: " + document.getData());
+                    } else {
+                        Log.d(TAG, "No such document");
+                    }
+                } else {
+                    Log.d(TAG, "get failed with ", task.getException());
+                }
+            }
+        });
+    }
+
+
+    public void addOrRemoveFromFavourites(){
+        DocumentReference favouritesRef = fireStoreDb.collection("users").document(FirebaseAuth.getInstance().getCurrentUser().getUid());
+        if(!favourite){
+            favouritesRef.update("favourites", FieldValue.arrayUnion(movieID));
+            movieFavourite.setImageResource(R.drawable.ic_baseline_favorite_filled_24);
+            Toast.makeText(getActivity(),"Added to favourites",
+                    Toast.LENGTH_SHORT).show();
+
+        }else{
+            favouritesRef.update("favourites", FieldValue.arrayRemove(movieID));
+            movieFavourite.setImageResource(R.drawable.ic_baseline_favorite_no_fill_24);
+            Toast.makeText(getActivity(),"Removed from favourites",
+                    Toast.LENGTH_SHORT).show();
+        }
+            favourite=!favourite;
 
     }
 }

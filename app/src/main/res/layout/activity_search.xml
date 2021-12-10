@@ -32,6 +32,7 @@
             android:id="@+id/textField_Search"
             android:maxLines="1"
             android:inputType="text"
+            android:imeOptions="actionDone"
             android:paddingStart="20dp"
             android:hint="Search for a movie Title or Category"
             android:textColorHint="#6C6969"
