@@ -23,6 +23,7 @@ public class MovieInfoFragment extends AbstractFragment{
     private ImageView movieShare;
     private TextView movieTitle;
     private TextView movieDescription;
+    private String nullURL = "https://image.tmdb.org/t/p/w500null";
 
     private boolean favourite = false;
 
@@ -71,7 +72,12 @@ public class MovieInfoFragment extends AbstractFragment{
 
             movieID = (bundle.getInt("movie_id"));
 
-            Picasso.get().load(bundle.getString("movie_image")).into(movieImage);
+            if(!(bundle.getString("movie_image")).equals(nullURL)) {
+                Picasso.get().load(bundle.getString("movie_image")).into(movieImage);
+            } else {
+                Picasso.get().load(R.drawable.image_place_holder).into(movieImage);
+            }
+
             movieRating.setText(String.valueOf(bundle.getDouble("movie_rating")));
 
             if(bundle.getBoolean("movie_favourite")) {

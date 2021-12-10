@@ -4,16 +4,21 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.codehub.movieinfoapp.R;
 import com.codehub.movieinfoapp.models.Movie;
+import com.codehub.movieinfoapp.ui.fragments.MovieInfoFragment;
+import com.google.android.material.card.MaterialCardView;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -22,8 +27,9 @@ public class RequestedMoviesAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     public ArrayList<Movie> requestedMovies;
     public ArrayList<Movie> requestedCategoryMovies;
     private Context context;
-    String categoryName;
+    private String categoryName;
     private LayoutInflater layoutInflater;
+    private String baseURL = "https://image.tmdb.org/t/p/w500";
 
     //Url Prefix for used as thumbnail url prefix
     private static final String base_url = "https://image.tmdb.org/t/p/w500";
@@ -51,31 +57,49 @@ public class RequestedMoviesAdapter extends RecyclerView.Adapter<RecyclerView.Vi
             }else{
                 View view = layoutInflater.inflate(R.layout.holder_search_single_movie, parent, false);
                 return new MovieViewHolder(view);
-
             }
-
-
-
-
     }
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+
         if (holder instanceof MovieViewHolder && requestedMovies!=null && requestedMovies.size()>0) {
             Movie movie = requestedMovies.get(position-1);//use -1 because 1st item ins vertical recycler view is the horizontal rv
             ((MovieViewHolder)holder).movieName_textView.setText(movie.movieName);
             if(movie.movieThumbnailUrl!=null) {
                 //parse url inside xml image_thumbnail
                 Picasso.get().load(base_url + movie.movieThumbnailUrl).into(((MovieViewHolder)holder).movieThumbnail);
-//                Picasso.get().load(movie.movieThumbnailUrl).into(holder.movieThumbnail);
             }else{
                 ((MovieViewHolder)holder).movieThumbnail.setImageResource(R.drawable.image_place_holder);
-//                Picasso.get().load(R.drawable.image_place_holder).into(holder.movieThumbnail);
             }
 
-//            String name = getDataVertical().get(position-1).mName;
-//            Log.d("###", "Setting name: " + name);
-//            ((MyViewHolder) holder).getmDataTextView().setText(name);
+            ((MovieViewHolder)holder).movieCardView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    System.out.println("position clicked: " + holder.getAdapterPosition());
+
+                    AppCompatActivity activity = (AppCompatActivity) v.getContext();
+                    FragmentTransaction transaction = activity.getSupportFragmentManager().beginTransaction();
+
+                    transaction.addToBackStack("MovieInfoFragment");
+                    transaction.replace(R.id.fragmentContainer, MovieInfoFragment.newInstance(
+                            movie.id,
+                            baseURL + movie.movieThumbnailUrl,
+                            movie.movieRating,
+                            false,
+                            movie.movieName,
+                            movie.movieDescription
+                    ), "MovieInfoFragment").commit();
+
+                    System.out.println("stack count" + activity.getSupportFragmentManager().getBackStackEntryCount());
+
+                    FrameLayout fragmentContainer = activity.findViewById(R.id.fragmentContainer);
+                    fragmentContainer.setTranslationY(1800);
+                    fragmentContainer.animate().translationY(0).alpha(1).setDuration(250).setStartDelay(100).start();
+                }
+            });
+
         } else if (holder instanceof CategoryMovieViewHolder) {
             String text;
             if(requestedCategoryMovies!=null){
@@ -103,7 +127,6 @@ public class RequestedMoviesAdapter extends RecyclerView.Adapter<RecyclerView.Vi
             ((CategoryMovieViewHolder)holder).recyclerView.setAdapter(new MovieAdapter(context, requestedCategoryMovies));
 //            ((CategoryMovieViewHolder)holder).categoryName.setText(categories.get(position).categoryName);
         }
-
     }
 
     @Override
@@ -117,20 +140,19 @@ public class RequestedMoviesAdapter extends RecyclerView.Adapter<RecyclerView.Vi
           }else{
               return 0;
           }
-
         }
     }
-
-
 
     public static class MovieViewHolder extends RecyclerView.ViewHolder {
         public ImageView movieThumbnail;
         public TextView movieName_textView;
+        public MaterialCardView movieCardView;
 
         public MovieViewHolder(View itemView) {
             super(itemView);
-            movieName_textView = (TextView) itemView.findViewById(R.id.search_movieName_textView);
-            movieThumbnail = (ImageView) itemView.findViewById(R.id.search_movie_thumbnail);
+            movieName_textView = itemView.findViewById(R.id.search_movieName_textView);
+            movieThumbnail = itemView.findViewById(R.id.search_movie_thumbnail);
+            movieCardView =  itemView.findViewById(R.id.movie_cardView);
         }
     }
 
@@ -142,15 +164,16 @@ public class RequestedMoviesAdapter extends RecyclerView.Adapter<RecyclerView.Vi
 
         public CategoryMovieViewHolder(View itemView) {
             super(itemView);
-            recyclerView = (RecyclerView) itemView.findViewById(R.id.movies_recycler_view);
-            categoryName = (TextView) itemView.findViewById(R.id.category_name_textView);
-            category_hz_list = (ConstraintLayout) itemView.findViewById(R.id.category_horizontal_list_layout);
-            movies_tag_word = (TextView) itemView.findViewById(R.id.movieList_results);
+            recyclerView = itemView.findViewById(R.id.movies_recycler_view);
+            categoryName =  itemView.findViewById(R.id.category_name_textView);
+            category_hz_list = itemView.findViewById(R.id.category_horizontal_list_layout);
+            movies_tag_word = itemView.findViewById(R.id.movieList_results);
             categoryName.setVisibility(View.GONE);
             recyclerView.setVisibility(View.GONE);
             category_hz_list.setPadding(0,0,0,0);
         }
     }
+
     public  void filterList(ArrayList<Movie> filteredList,boolean isCategoryMovie,String categoryName){
         if(isCategoryMovie){
             requestedCategoryMovies = filteredList;
