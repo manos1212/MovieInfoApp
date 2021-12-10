@@ -30,6 +30,7 @@ android {
 }
 
 dependencies {
+    implementation 'com.google.firebase:firebase-firestore'
     implementation platform('com.google.firebase:firebase-bom:29.0.1')
     implementation 'com.facebook.shimmer:shimmer:0.5.0'
     implementation 'androidx.appcompat:appcompat:1.4.0'

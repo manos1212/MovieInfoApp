@@ -1,14 +1,20 @@
 package com.codehub.movieinfoapp.ui.fragments;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.WindowManager;
+import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -52,7 +58,6 @@ public class SignInFragment extends AbstractFragment {
         password = view.findViewById(R.id.textField_pwd);
         forgot_pwd = view.findViewById(R.id.login_forgotten);
         login_btn = view.findViewById(R.id.login_btn);
-
         email_text = view.findViewById(R.id.signIn_email_text);
         password_text = view.findViewById(R.id.signIn_password_text);
         username.setTranslationX(1000);
@@ -69,8 +74,8 @@ public class SignInFragment extends AbstractFragment {
             @Override
             public void onClick(View view) {
                 applyFieldChecks();
-                InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+//                InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+//                imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
             }
         });
 
@@ -87,6 +92,13 @@ public class SignInFragment extends AbstractFragment {
     public void stopOperations() {
 
     }
+
+    @Override
+    public void onDestroy() {
+        ((LoginActivity)getActivity()).hideIndicator();
+        super.onDestroy();
+    }
+
     private void applyFieldChecks(){
         String email = email_text.getText().toString();
         String password = password_text.getText().toString();
@@ -100,6 +112,7 @@ public class SignInFragment extends AbstractFragment {
     }
 
     public void signInUser(){
+        ((LoginActivity)getActivity()).showIndicator();
         mAuth.signInWithEmailAndPassword(email_text.getText().toString(), password_text.getText().toString())
                 .addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
                     @Override
@@ -109,6 +122,7 @@ public class SignInFragment extends AbstractFragment {
                             Log.d(TAG, "signInWithEmail:success");
                             FirebaseUser user = mAuth.getCurrentUser();
                             if(user.isEmailVerified()){
+
                                 Intent intent = new Intent(getContext(), MainActivity.class);
                                 startActivity(intent);
                                 if(getActivity()!=null){
@@ -116,7 +130,7 @@ public class SignInFragment extends AbstractFragment {
                                 }
 
                             }else{
-
+                                ((LoginActivity)getActivity()).hideIndicator();
                                 Snackbar snackbar = Snackbar.make(getView(),"Please verify your email",
                                         Snackbar.LENGTH_LONG);
                                 snackbar.addCallback(new Snackbar.Callback(){
@@ -154,6 +168,7 @@ public class SignInFragment extends AbstractFragment {
                             }
 
                         } else {
+                            ((LoginActivity)getActivity()).hideIndicator();
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithEmail:failure", task.getException());
                             Toast.makeText(getActivity(), task.getException().getLocalizedMessage(),
@@ -166,19 +181,21 @@ public class SignInFragment extends AbstractFragment {
     }
 
     public void resetPassword(){
-        final EditText edittext = new EditText(getContext());
+        LayoutInflater inflater = this.getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.forgot_pass_dialog, null);
+        Button reset = dialogView.findViewById(R.id.reset_btn);
+        EditText email_text = dialogView.findViewById(R.id.editText_forgot_pass);
+        ImageView close_dialog_btn = dialogView.findViewById(R.id.close_dialog);
         AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
-        alert.setIcon(android.R.drawable.ic_dialog_email);
-        alert.setTitle("Reset password");
-        alert.setMessage("Enter your email");
-        alert.setNegativeButton("Cancel", null);
-        alert.setView(edittext);
-
-        alert.setPositiveButton("Yes", new DialogInterface.OnClickListener()
-        {
+        alert.setView(dialogView);
+        Dialog dialog = alert.create();
+        dialog.show();
+//        View view = inflater.inflate(R.layout.forgot_pass_dialog, null);
+        dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        reset.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(DialogInterface dialog, int which) {
-                String email = edittext.getText().toString();
+            public void onClick(View view) {
+                String email = email_text.getText().toString();
                 if(email.isEmpty()){
                     Toast.makeText(getActivity(), "Email can't be empty",
                             Toast.LENGTH_SHORT).show();
@@ -187,7 +204,11 @@ public class SignInFragment extends AbstractFragment {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
                             if (task.isSuccessful()) {
+
+                                dialog.cancel();
                                 Log.d(TAG, "Email sent.");
+//                                InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+//                                imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
                                 Snackbar.make(getView(), "Reset password link sent to your email.Check your emails!",
                                         Snackbar.LENGTH_LONG).show();
                             } else {
@@ -199,10 +220,20 @@ public class SignInFragment extends AbstractFragment {
                 }
             }
         });
+        close_dialog_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.cancel();
+            }
+        });
 
-        alert.show();
+
+
+
+
 
     }
+
 
 
 }

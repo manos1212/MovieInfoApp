@@ -15,7 +15,6 @@
             android:hint="Email"
             android:id="@+id/textField_email"
             app:boxStrokeWidthFocused="0dp"
-            android:inputType="textEmailAddress"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             app:layout_constraintWidth_percent="0.8"
@@ -32,7 +31,7 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:backgroundTint="#F1EEEE"
                 android:id="@+id/editText_email"
-
+                android:inputType="textEmailAddress"
                 android:paddingStart="20dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
@@ -103,6 +102,7 @@
                 android:inputType="textPassword"
                 android:backgroundTint="#F1EEEE"
                 android:layout_width="match_parent"
+                android:imeOptions="actionDone"
                 android:layout_height="wrap_content" />
         </com.google.android.material.textfield.TextInputLayout>
         <Button
