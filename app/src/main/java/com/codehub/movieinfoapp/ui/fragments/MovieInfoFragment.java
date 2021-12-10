@@ -15,26 +15,16 @@ import androidx.annotation.NonNull;
 import com.codehub.movieinfoapp.R;
 import com.codehub.movieinfoapp.common.AbstractFragment;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
-import com.google.firebase.firestore.SetOptions;
 import com.squareup.picasso.Picasso;
 
-import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import static android.service.controls.ControlsProviderService.TAG;
 
@@ -152,7 +142,7 @@ public class MovieInfoFragment extends AbstractFragment{
     }
 
     public void checkIfFavourite(){
-        System.out.println("DsfsdfsdfsdfsdfdsF"+FirebaseAuth.getInstance().getUid());
+        System.out.println("DsfsdfsdfsdfsdfdsF"+ FirebaseAuth.getInstance().getUid());
         // Add a new document with a generated ID
         DocumentReference docRef = fireStoreDb.collection("users").document(FirebaseAuth.getInstance().getCurrentUser().getUid());
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {

@@ -55,42 +55,14 @@ public class MainActivity extends AbstractActivity {
             }
         });
 
-    bottomNavigationView = findViewById(R.id.bottom_nav);
-    bottomNavigationView.setOnItemSelectedListener(mOnNavigationItemSelectedListener) ;
-    if(!profileFragment.isAdded()) {
-        fragmentManager.beginTransaction().add(R.id.main_container, profileFragment, "3").hide(profileFragment).commit();
-        fragmentManager.beginTransaction().add(R.id.main_container, favouritesFragment, "2").hide(favouritesFragment).commit();
-        fragmentManager.beginTransaction().add(R.id.main_container, homeFragment, "1").commit();
-    }
-//    {
-//        @SuppressLint("NonConstantResourceId")
-//        @Override
-//        public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-//            Fragment fragment;
-//            switch (menuItem.getItemId()){
-//                case R.id.home:
-//                    fragment = homeFragment;
-//                    selectedFragment = R.id.home;
-//                    break;
-//                    case R.id.favourites:
-//                    fragment = favouritesFragment;
-//                        selectedFragment = R.id.favourites;
-//                    break;
-//                    case R.id.profile:
-//                    fragment = profileFragment;
-//                    selectedFragment = R.id.profile;
-//                    break;
-//                default:
-//                    return false;
-//
-//
-//            }
-//            getSupportFragmentManager().beginTransaction().replace(R.id.main_container,fragment).commit();
-//            return true;
-//        }
-//
-//    });
-//    bottomNavigationView.setSelectedItemId(selectedFragment);
+        bottomNavigationView = findViewById(R.id.bottom_nav);
+        bottomNavigationView.setOnItemSelectedListener(mOnNavigationItemSelectedListener) ;
+        if(!profileFragment.isAdded()) {
+            fragmentManager.beginTransaction().add(R.id.main_container, profileFragment, "3").hide(profileFragment).commit();
+            fragmentManager.beginTransaction().add(R.id.main_container, favouritesFragment, "2").hide(favouritesFragment).commit();
+            fragmentManager.beginTransaction().add(R.id.main_container, homeFragment, "1").commit();
+        }
+
     }
 
     private BottomNavigationView.OnItemSelectedListener mOnNavigationItemSelectedListener
@@ -128,19 +100,6 @@ public class MainActivity extends AbstractActivity {
                 super.onBackPressed();
             }
         } else {
-//            new AlertDialog.Builder(this)
-//                    .setIcon(android.R.drawable.ic_dialog_alert)
-//                    .setTitle("Exit Application")
-//                    .setMessage("Are you sure you want to exit?")
-//                    .setPositiveButton("Yes", new DialogInterface.OnClickListener()
-//                    {
-//                        @Override
-//                        public void onClick(DialogInterface dialog, int which) {
-//                          moveTaskToBack(true);
-//                        }
-//                    })
-//                    .setNegativeButton("No", null)
-//                    .show();
 
             if (doubleBackToExitPressedOnce) {
                 super.onBackPressed();
