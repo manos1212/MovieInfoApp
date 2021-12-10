@@ -1,11 +1,11 @@
 package com.codehub.movieinfoapp.models;
 
 public class Movie {
-    public int id;
-    public String movieName;
-    public String movieThumbnailUrl;
-    public String movieDescription;
-    public Double movieRating;
+    private int id;
+    private String movieName;
+    private String movieThumbnailUrl;
+    private String movieDescription;
+    private Double movieRating;
 
     public String getMovieDescription() {
         return movieDescription;

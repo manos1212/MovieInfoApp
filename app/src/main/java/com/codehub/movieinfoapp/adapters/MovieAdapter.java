@@ -45,8 +45,8 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
     public void onBindViewHolder(MovieViewHolder holder, int position) {
         Movie movie = movies.get(position);
 
-        if(movie.movieThumbnailUrl!=null) {
-            Picasso.get().load(baseURL + movie.movieThumbnailUrl).into(holder.movieThumbnail);
+        if(movie.getMovieThumbnailUrl()!=null) {
+            Picasso.get().load(baseURL + movie.getMovieThumbnailUrl()).into(holder.movieThumbnail);
         } else {
             Picasso.get().load(R.drawable.image_place_holder).into(holder.movieThumbnail);
         }
@@ -63,12 +63,12 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
 
                  transaction.addToBackStack("MovieInfoFragment");
                  transaction.replace(R.id.fragmentContainer, MovieInfoFragment.newInstance(
-                     movie.id,
-                    baseURL + movie.movieThumbnailUrl,
-                     movie.movieRating,
+                     movie.getId(),
+                    baseURL + movie.getMovieThumbnailUrl(),
+                     movie.getMovieRating(),
                      false,
-                     movie.movieName,
-                     movie.movieDescription
+                     movie.getMovieName(),
+                     movie.getMovieDescription()
                  ),"MovieInfoFragment").commit();
 
                  System.out.println("stack count" + activity.getSupportFragmentManager().getBackStackEntryCount());

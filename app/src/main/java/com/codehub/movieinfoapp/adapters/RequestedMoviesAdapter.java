@@ -65,10 +65,10 @@ public class RequestedMoviesAdapter extends RecyclerView.Adapter<RecyclerView.Vi
 
         if (holder instanceof MovieViewHolder && requestedMovies!=null && requestedMovies.size()>0) {
             Movie movie = requestedMovies.get(position-1);//use -1 because 1st item ins vertical recycler view is the horizontal rv
-            ((MovieViewHolder)holder).movieName_textView.setText(movie.movieName);
-            if(movie.movieThumbnailUrl!=null) {
+            ((MovieViewHolder)holder).movieName_textView.setText(movie.getMovieName());
+            if(movie.getMovieThumbnailUrl()!=null) {
                 //parse url inside xml image_thumbnail
-                Picasso.get().load(base_url + movie.movieThumbnailUrl).into(((MovieViewHolder)holder).movieThumbnail);
+                Picasso.get().load(base_url + movie.getMovieThumbnailUrl()).into(((MovieViewHolder)holder).movieThumbnail);
             }else{
                 ((MovieViewHolder)holder).movieThumbnail.setImageResource(R.drawable.image_place_holder);
             }
@@ -84,12 +84,12 @@ public class RequestedMoviesAdapter extends RecyclerView.Adapter<RecyclerView.Vi
 
                     transaction.addToBackStack("MovieInfoFragment");
                     transaction.replace(R.id.fragmentContainer, MovieInfoFragment.newInstance(
-                            movie.id,
-                            baseURL + movie.movieThumbnailUrl,
-                            movie.movieRating,
+                            movie.getId(),
+                            baseURL + movie.getMovieThumbnailUrl(),
+                            movie.getMovieRating(),
                             false,
-                            movie.movieName,
-                            movie.movieDescription
+                            movie.getMovieName(),
+                            movie.getMovieDescription()
                     ), "MovieInfoFragment").commit();
 
                     System.out.println("stack count" + activity.getSupportFragmentManager().getBackStackEntryCount());

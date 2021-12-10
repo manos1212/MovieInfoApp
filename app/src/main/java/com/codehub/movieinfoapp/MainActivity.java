@@ -24,9 +24,9 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 
 public class MainActivity extends AbstractActivity {
-    private Fragment homeFragment = new HomeFragment();
-    private Fragment favouritesFragment = new FavouritesFragment();
-    private Fragment profileFragment = new ProfileFragment();
+    private HomeFragment homeFragment = new HomeFragment();
+    private FavouritesFragment favouritesFragment = new FavouritesFragment();
+    private ProfileFragment profileFragment = new ProfileFragment();
     private BottomNavigationView bottomNavigationView;
     private FragmentManager fragmentManager = getSupportFragmentManager();
     private Fragment activeFragment = homeFragment;
@@ -78,6 +78,7 @@ public class MainActivity extends AbstractActivity {
             }else if(item.getItemId()==R.id.favourites){
                 fragmentManager.beginTransaction().hide(activeFragment).show(favouritesFragment).commit();
                 activeFragment = favouritesFragment;
+//                favouritesFragment.getFavouritesFromDB();
                 return true;
             }else if(item.getItemId()==R.id.profile){
                 fragmentManager.beginTransaction().hide(activeFragment).show(profileFragment).commit();

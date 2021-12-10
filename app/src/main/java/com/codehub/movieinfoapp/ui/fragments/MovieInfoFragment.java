@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Adapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -13,7 +14,9 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 
 import com.codehub.movieinfoapp.R;
+import com.codehub.movieinfoapp.adapters.FavouritesAdapter;
 import com.codehub.movieinfoapp.common.AbstractFragment;
+import com.codehub.movieinfoapp.models.Movie;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -24,6 +27,7 @@ import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static android.service.controls.ControlsProviderService.TAG;
@@ -40,6 +44,11 @@ public class MovieInfoFragment extends AbstractFragment{
     private TextView movieDescription;
     private FirebaseFirestore fireStoreDb;
     private String nullURL = "https://image.tmdb.org/t/p/w500null";
+
+    private String movie_url;
+    private Double movie_rating;
+    private String movie_title;
+    private String movie_description;
 
     private boolean favourite = false;
 
@@ -81,12 +90,17 @@ public class MovieInfoFragment extends AbstractFragment{
         movieTitle = view.findViewById(R.id.movie_title);
         movieDescription = view.findViewById(R.id.movie_description);
 
+
         checkIfFavourite();
         InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
 
         Bundle bundle = this.getArguments();
         if (bundle != null) {
+            movie_description = bundle.getString("movie_description");
+            movie_rating = bundle.getDouble("movie_rating");
+            movie_url = bundle.getString("movie_image");
+            movie_title = bundle.getString("movie_title");
 
             movieID = (bundle.getInt("movie_id"));
 
@@ -177,20 +191,38 @@ public class MovieInfoFragment extends AbstractFragment{
 
 
     public void addOrRemoveFromFavourites(){
+        Movie movie = new Movie();
+        movie.setId(movieID);
+        movie.setMovieDescription(movie_description);
+        movie.setMovieThumbnailUrl(movie_url);
+        movie.setMovieRating(movie_rating);
+        movie.setMovieName(movie_title);
+        ArrayList<Movie> favMovies = FavouritesFragment.getInstance().favouriteMovies;
         DocumentReference favouritesRef = fireStoreDb.collection("users").document(FirebaseAuth.getInstance().getCurrentUser().getUid());
         if(!favourite){
+            System.out.println("this is url1"+movie_url);
+            favMovies.add(0,movie);
+            FavouritesFragment.getInstance().favouritesAdapter.notifyItemInserted(0);
             favouritesRef.update("favourites", FieldValue.arrayUnion(movieID));
             movieFavourite.setImageResource(R.drawable.ic_baseline_favorite_filled_24);
             Toast.makeText(getActivity(),"Added to favourites",
                     Toast.LENGTH_SHORT).show();
 
         }else{
+            for(int i = 0 ; i <  favMovies.size() ; i++){
+                if(movieID== favMovies.get(i).getId()){
+                    favMovies.remove(i);
+                }
+            }
+
+            FavouritesFragment.getInstance().favouritesAdapter.notifyDataSetChanged();
             favouritesRef.update("favourites", FieldValue.arrayRemove(movieID));
             movieFavourite.setImageResource(R.drawable.ic_baseline_favorite_no_fill_24);
             Toast.makeText(getActivity(),"Removed from favourites",
                     Toast.LENGTH_SHORT).show();
         }
             favourite=!favourite;
+//        FavouritesFragment.getInstance().getFavouritesFromDB();
 
     }
 }

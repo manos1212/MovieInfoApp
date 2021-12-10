@@ -38,8 +38,7 @@
             android:textColorHint="#6C6969"
             android:background="@drawable/search_bar_shape"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:imeOptions="actionDone" />
+            android:layout_height="wrap_content" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <ImageView

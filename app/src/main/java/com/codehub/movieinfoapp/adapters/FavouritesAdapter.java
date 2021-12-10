@@ -46,14 +46,14 @@ public class FavouritesAdapter extends RecyclerView.Adapter<FavouritesAdapter.Mo
     public void onBindViewHolder(MovieViewHolder holder, int position) {
         Movie movie = movies.get(position);
 
-        if(movie.movieThumbnailUrl!=null) {
-            Picasso.get().load(baseURL + movie.movieThumbnailUrl).into(holder.movieThumbnail);
+        if(movie.getMovieThumbnailUrl()!=null) {
+            Picasso.get().load(baseURL + movie.getMovieThumbnailUrl()).into(holder.movieThumbnail);
         } else {
             Picasso.get().load(R.drawable.image_place_holder).into(holder.movieThumbnail);
         }
 
-        holder.movieName_textView.setText("");
-        holder.movieThumbnail.setOnClickListener(new View.OnClickListener() {
+       holder.movieName_textView.setText(movie.getMovieName());
+        holder.movieCardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -64,12 +64,12 @@ public class FavouritesAdapter extends RecyclerView.Adapter<FavouritesAdapter.Mo
 
                 transaction.addToBackStack("MovieInfoFragment");
                 transaction.replace(R.id.fragmentContainer, MovieInfoFragment.newInstance(
-                    movie.id,
-                    baseURL + movie.movieThumbnailUrl,
-                    movie.movieRating,
+                    movie.getId(),
+                        (!movie.getMovieThumbnailUrl().contains(baseURL))?baseURL + movie.getMovieThumbnailUrl():movie.getMovieThumbnailUrl(),
+                    movie.getMovieRating(),
                     false,
-                    movie.movieName,
-                    movie.movieDescription
+                    movie.getMovieName(),
+                    movie.getMovieDescription()
                 ),"MovieInfoFragment").commit();
 
                 System.out.println("stack count" + activity.getSupportFragmentManager().getBackStackEntryCount());
@@ -103,4 +103,11 @@ public class FavouritesAdapter extends RecyclerView.Adapter<FavouritesAdapter.Mo
             movieCardView =  itemView.findViewById(R.id.movie_cardView);
         }
     }
+
+    public void refreshUi(ArrayList<Movie> favMovies){
+        movies = favMovies;
+        notifyDataSetChanged();
+
+    }
+
 }
