@@ -101,7 +101,9 @@ public class MainActivity extends AbstractActivity {
                 super.onBackPressed();
             }
         } else {
-
+//            fragmentManager.beginTransaction().hide(activeFragment).show(homeFragment).commit();
+//            activeFragment = homeFragment;
+            bottomNavigationView.setSelectedItemId(R.id.home);
             if (doubleBackToExitPressedOnce) {
                 super.onBackPressed();
                 return;

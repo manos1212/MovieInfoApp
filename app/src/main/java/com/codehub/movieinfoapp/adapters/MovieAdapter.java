@@ -54,11 +54,11 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
         holder.movieName_textView.setText("");
         holder.movieThumbnail.setOnClickListener(new View.OnClickListener() {
              @Override
-             public void onClick(View v) {
+             public void onClick(View view) {
 
                  System.out.println("position clicked: " + holder.getAdapterPosition());
 
-                 AppCompatActivity activity = (AppCompatActivity)v.getContext();
+                 AppCompatActivity activity = (AppCompatActivity) view.getContext();
                  FragmentTransaction transaction = activity.getSupportFragmentManager().beginTransaction();
 
                  transaction.addToBackStack("MovieInfoFragment");

@@ -8,14 +8,18 @@
 
 <Button
     android:id="@+id/sign_out_btn"
-    app:layout_constraintTop_toTopOf="parent"
     app:layout_constraintBottom_toBottomOf="parent"
     app:layout_constraintStart_toStartOf="parent"
+    android:layout_marginStart="40dp"
+    android:layout_marginEnd="40dp"
+    android:layout_marginBottom="80dp"
     app:layout_constraintEnd_toEndOf="parent"
     android:layout_width="match_parent"
-    android:layout_height="100dp"
-    android:textSize="22sp"
+    android:layout_height="50dp"
+    android:textSize="18sp"
+    app:backgroundTint="@null"
+    android:background="@drawable/login_buttons_shape"
     android:text="Sign Out"
-    android:backgroundTint="@color/black"/>
+    />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

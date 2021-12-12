@@ -83,8 +83,8 @@ public class FavouritesFragment extends AbstractFragment {
                 if (task.isSuccessful()) {
                     DocumentSnapshot document = task.getResult();
                     if (document.exists()) {
-                        if(document.get("favourites")!=null){
-                            List<Long> favourites = (List<Long>) document.get("favourites");
+                        if(document.get("favouriteMovies")!=null){
+                            List<Long> favourites = (List<Long>) document.get("favouriteMovies");
                             if(!favourites.isEmpty()){
                                 for(long i:favourites){
                                    baseUrl="https://api.themoviedb.org/3/movie/"+i+"?api_key="+ BuildConfig.MDB_API_KEY +"&language=en-US";
@@ -95,7 +95,6 @@ public class FavouritesFragment extends AbstractFragment {
                                                     try {
                                                         //convert json response to objects/classes
                                                         JsonResultsResponse jsonResultsResponse = new Gson().fromJson(response, JsonResultsResponse.class);
-                                                        //hide progress indicator
                                                         System.out.println(jsonResultsResponse);
                                                         //parse data to movie object
                                                         parseMovieResponse(jsonResultsResponse);

@@ -165,8 +165,8 @@ public class MovieInfoFragment extends AbstractFragment{
                 if (task.isSuccessful()) {
                     DocumentSnapshot document = task.getResult();
                     if (document.exists()) {
-                        if(document.get("favourites")!=null){
-                            List<Long> favourites = (List<Long>) document.get("favourites");
+                        if(document.get("favouriteMovies")!=null){
+                            List<Long> favourites = (List<Long>) document.get("favouriteMovies");
                             System.out.println("!!!!!!!!!!!"+favourites);
                             for(long i:favourites){
                                 if(i==movieID){
@@ -203,7 +203,7 @@ public class MovieInfoFragment extends AbstractFragment{
             System.out.println("this is url1"+movie_url);
             favMovies.add(0,movie);
             FavouritesFragment.getInstance().favouritesAdapter.notifyItemInserted(0);
-            favouritesRef.update("favourites", FieldValue.arrayUnion(movieID));
+            favouritesRef.update("favouriteMovies", FieldValue.arrayUnion(movieID));
             movieFavourite.setImageResource(R.drawable.ic_baseline_favorite_filled_24);
             Toast.makeText(getActivity(),"Added to favourites",
                     Toast.LENGTH_SHORT).show();
@@ -216,7 +216,7 @@ public class MovieInfoFragment extends AbstractFragment{
             }
 
             FavouritesFragment.getInstance().favouritesAdapter.notifyDataSetChanged();
-            favouritesRef.update("favourites", FieldValue.arrayRemove(movieID));
+            favouritesRef.update("favouriteMovies", FieldValue.arrayRemove(movieID));
             movieFavourite.setImageResource(R.drawable.ic_baseline_favorite_no_fill_24);
             Toast.makeText(getActivity(),"Removed from favourites",
                     Toast.LENGTH_SHORT).show();
