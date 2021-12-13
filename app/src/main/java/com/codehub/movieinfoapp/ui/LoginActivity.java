@@ -1,6 +1,7 @@
 package com.codehub.movieinfoapp.ui;
 
 import android.content.Intent;
+import android.service.controls.ControlsProviderService;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
@@ -9,6 +10,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.viewpager2.widget.ViewPager2;
 
@@ -23,6 +25,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
@@ -31,6 +34,11 @@ import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import static android.content.ContentValues.TAG;
 
@@ -46,6 +54,7 @@ public class LoginActivity extends AbstractActivity {
     GoogleSignInClient mGoogleSignInClient;
     private static final int RC_SIGN_IN = 1;
      boolean  keepState = false;
+    private FirebaseFirestore fireStoreDb;
 
     @Override
     public int getLayoutRes() {
@@ -54,6 +63,7 @@ public class LoginActivity extends AbstractActivity {
 
     @Override
     public void startOperations() {
+        fireStoreDb = FirebaseFirestore.getInstance();
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
@@ -156,6 +166,7 @@ public class LoginActivity extends AbstractActivity {
     private void signInWithGoogle() {
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
         startActivityForResult(signInIntent, RC_SIGN_IN);
+
     }
 
     private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
@@ -163,10 +174,30 @@ public class LoginActivity extends AbstractActivity {
         mAuth.signInWithCredential(credential)
                 .addOnSuccessListener(this, authResult -> {
                     startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                    addGoogleUserToFireStore(acct.getEmail());
                     finish();
                 })
                 .addOnFailureListener(this, e -> Toast.makeText(LoginActivity.this, "Authentication failed.",
                         Toast.LENGTH_SHORT).show());
+    }
+
+
+
+    public void addGoogleUserToFireStore(String email){
+        // Create a new user with a first and last name
+        Map<String, Object> user = new HashMap<>();
+        user.put("email", email);
+        user.put("favouriteMovies",new ArrayList<>());
+
+        // Add a new document with a generated ID
+        fireStoreDb.collection("users").document(FirebaseAuth.getInstance().getUid()).set(user)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        Log.d(ControlsProviderService.TAG, "DocumentSnapshot added with ID: ");
+                    }
+                });
+
     }
 
 }

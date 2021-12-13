@@ -73,6 +73,8 @@ public class RequestedMoviesAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                 ((MovieViewHolder)holder).movieThumbnail.setImageResource(R.drawable.image_place_holder);
             }
 
+
+
             ((MovieViewHolder)holder).movieCardView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -174,12 +176,18 @@ public class RequestedMoviesAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         }
     }
 
-    public  void filterList(ArrayList<Movie> filteredList,boolean isCategoryMovie,String categoryName){
-        if(isCategoryMovie){
-            requestedCategoryMovies = filteredList;
-            this.categoryName = categoryName;
+    public  void filterList(ArrayList<Movie> filteredList,boolean isCategoryMovie,String categoryName,boolean pagination){
+
+        if(!pagination) {
+            if (isCategoryMovie) {
+                requestedCategoryMovies = filteredList;
+                this.categoryName = categoryName;
+            } else {
+                requestedMovies = filteredList;
+            }
         }else{
-            requestedMovies = filteredList;
+                requestedMovies.addAll(filteredList);
+
         }
 
         notifyDataSetChanged();

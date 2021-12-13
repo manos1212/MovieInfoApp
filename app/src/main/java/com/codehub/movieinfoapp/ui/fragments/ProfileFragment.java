@@ -40,8 +40,8 @@ public class ProfileFragment extends AbstractFragment {
         public void onClick(View view) {
             FirebaseAuth.getInstance()
                     .signOut();
-            // Google sign out
 
+            // Google sign out
             GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                     .requestIdToken(getString(R.string.default_web_client_id))
                     .requestEmail()

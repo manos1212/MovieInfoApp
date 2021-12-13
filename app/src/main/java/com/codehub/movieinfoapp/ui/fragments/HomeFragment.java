@@ -3,6 +3,7 @@ package com.codehub.movieinfoapp.ui.fragments;
 import android.os.Handler;
 import android.os.Looper;
 import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -38,6 +39,12 @@ public class HomeFragment extends AbstractFragment {
     private Handler handler;
     private Runnable workRunnable;
     int count;
+    public static String popularApiUrl = "https://api.themoviedb.org/3/movie/popular?api_key=" + BuildConfig.MDB_API_KEY + "&language=en-US&page=1";
+    public static String topRatedApiUrl = "https://api.themoviedb.org/3/movie/top_rated?api_key=" + BuildConfig.MDB_API_KEY + "&language=en-US&page=1";
+    public static String nowPlayingApiUrl = "https://api.themoviedb.org/3/movie/now_playing?api_key=" + BuildConfig.MDB_API_KEY + "&language=en-US&page=1";
+    public static String upcomingApiUrl = "https://api.themoviedb.org/3/movie/upcoming?api_key=" + BuildConfig.MDB_API_KEY + "&language=en-US&page=1";
+    public static String[] categoryNames = {"Trending now","All Time Most Popular","Top Rated","Coming Soon"};
+    public static String[] categoriesUrlList = {nowPlayingApiUrl, popularApiUrl,topRatedApiUrl,upcomingApiUrl};
     @Override
     public int getLayoutRes() {
         return R.layout.fragment_home;
@@ -81,12 +88,7 @@ public class HomeFragment extends AbstractFragment {
 //        ArrayList<MoviesCategory> categories = new ArrayList<>();
 
 
-        String popularApiUrl = "https://api.themoviedb.org/3/movie/popular?api_key=" + BuildConfig.MDB_API_KEY + "&language=en-US&page=1";
-        String topRatedApiUrl = "https://api.themoviedb.org/3/movie/top_rated?api_key=" + BuildConfig.MDB_API_KEY + "&language=en-US&page=1";
-        String nowPlayingApiUrl = "https://api.themoviedb.org/3/movie/now_playing?api_key=" + BuildConfig.MDB_API_KEY + "&language=en-US&page=1";
-        String upcomingApiUrl = "https://api.themoviedb.org/3/movie/upcoming?api_key=" + BuildConfig.MDB_API_KEY + "&language=en-US&page=1";
-        String[] categoryNames = {"Trending now","All Time Most Popular","Top Rated","Coming Soon"};
-        String[] categoriesUrlList = {nowPlayingApiUrl, popularApiUrl,topRatedApiUrl,upcomingApiUrl};
+
         //Initialize request que
         RequestQueue queue = Volley.newRequestQueue(getContext());
         //Initialize String request for movieNames
@@ -103,7 +105,7 @@ public class HomeFragment extends AbstractFragment {
 //                        progressIndicator.setVisibility(View.GONE);
                             System.out.println(jsonResponse);
                             //parse data to movie object
-                            MoviesCategory category = parseCategoryResponse(jsonResponse,categoryNames[count]);
+                            MoviesCategory category = parseCategoryResponse(jsonResponse,categoryNames[count],categoryUrl);
                             categories.add(category);
                             count++;
 //                        JSONArray jsonArray = new JSONArray(response);
@@ -164,7 +166,7 @@ public class HomeFragment extends AbstractFragment {
         }
     }
         //check to add name category name here
-    private MoviesCategory parseCategoryResponse(JsonResponse response, String categoryName) {
+    private MoviesCategory parseCategoryResponse(JsonResponse response, String categoryName,String categoryUrl) {
         MoviesCategory moviesCategory = new MoviesCategory();
         ArrayList<Movie> movies = new ArrayList<>();
         List<JsonResultsResponse> results = response.getResults();
@@ -191,4 +193,6 @@ public class HomeFragment extends AbstractFragment {
 
 
     }
+
+
 }

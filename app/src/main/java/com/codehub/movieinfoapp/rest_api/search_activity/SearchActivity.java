@@ -15,6 +15,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -54,6 +55,8 @@ public class SearchActivity extends AbstractActivity {
     private Handler handler;
     Runnable workRunnable;
     private String latestQuery = "";
+    int page;
+    boolean isLoading;
 
     @Override
     public int getLayoutRes() {
@@ -62,7 +65,7 @@ public class SearchActivity extends AbstractActivity {
 
     @Override
     public void startOperations() {
-
+        isLoading=false;
         handler= new Handler(Looper.getMainLooper());
         api_movie_categories = setCategories();
         searchText = findViewById(R.id.textField_Search);
@@ -102,6 +105,23 @@ public class SearchActivity extends AbstractActivity {
         LinearLayoutManager manager = new LinearLayoutManager(SearchActivity.this);
         search_movies_rv.setLayoutManager(manager);
         search_movies_rv.setAdapter(movieAdapter);
+        search_movies_rv.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                LinearLayoutManager layoutManager=LinearLayoutManager.class.cast(recyclerView.getLayoutManager());
+                int visibleItemCount = layoutManager.getChildCount();
+                int totalItemCount = layoutManager.getItemCount();
+                int firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition();
+
+                if (!isLoading) {
+                    if ((visibleItemCount + firstVisibleItemPosition) >= totalItemCount
+                            && firstVisibleItemPosition >= 0) {
+                        paginateResults(latestQuery,page);
+                    }
+                }
+            }
+        });
 
         hideKeyboardOnScroll(search_movies_rv);
         getUserInput(latestQuery);
@@ -126,13 +146,14 @@ public class SearchActivity extends AbstractActivity {
         }else{
             movie_list_title.setText("");
 //            category_title.setText("");
-            movieAdapter.filterList(null,false,null);
-            movieAdapter.filterList(null,true,null);
+            movieAdapter.filterList(null,false,null,false);
+            movieAdapter.filterList(null,true,null,false);
 //            movieAdapter.filterList(new ArrayList<>());
         }
     }
 
     private void prepareData(String query) {
+        page = 0;
 //        if(!query.isEmpty()) {
             String apiUrlCategory = null;
             category_type = "";
@@ -168,10 +189,11 @@ public class SearchActivity extends AbstractActivity {
                             progressIndicator.setVisibility(View.GONE);
                             System.out.println(jsonResponse);
                             //parse data to movie object
-                            boolean hasMovies =  parseMovieResponse(jsonResponse);
+                            boolean hasMovies =  parseMovieResponse(jsonResponse,false);
                             System.out.println("HAs movjdhxhvjv" + hasMovies);
                             String text;
                             if(hasMovies){
+                                page=2;
                                 text = "Showing results for  " + '"' + query + '"';
 
 
@@ -236,7 +258,7 @@ public class SearchActivity extends AbstractActivity {
             } else {
 //                category_title.setVisibility(View.GONE);
 //                category_title.setText("");
-                movieAdapter.filterList(null,true,category_type);
+                movieAdapter.filterList(null,true,category_type,false);
             }
 
 //        }else{
@@ -250,7 +272,7 @@ public class SearchActivity extends AbstractActivity {
 
 
 
-    private boolean parseMovieResponse(JsonResponse response) {
+    private boolean parseMovieResponse(JsonResponse response, boolean pagination) {
         ArrayList<Movie> movies = new ArrayList<>();
         List<JsonResultsResponse> results = response.getResults();
         for(int i=0;i<results.size();i++){
@@ -269,8 +291,9 @@ public class SearchActivity extends AbstractActivity {
             }
 
         }
-            movieAdapter.filterList(movies,false,null);
-
+            page+=1;
+            movieAdapter.filterList(movies,false,null,pagination);
+            isLoading = false;
         return movies.size() > 0;
     }
 
@@ -295,7 +318,7 @@ public class SearchActivity extends AbstractActivity {
 
         }
 //            movieAdapter.notifyItemInserted(0);
-            movieAdapter.filterList(movies,true,category_type);
+            movieAdapter.filterList(movies,true,category_type,false);
 
 
     }
@@ -342,4 +365,49 @@ public class SearchActivity extends AbstractActivity {
             }
         });
     }
+
+ public void paginateResults(String query, int page){
+     String apiUrlName = "https://api.themoviedb.org/3/search/movie?api_key=" + BuildConfig.MDB_API_KEY + "&language=en-US&page=" + page + "&include_adult=false&query=" + query;
+
+     isLoading = true;
+     ProgressBar progressIndicator = findViewById(R.id.search_progress_indicator);
+     //show progress indicator
+     progressIndicator.setVisibility(View.VISIBLE);
+     //Initialize request que
+     RequestQueue queue = Volley.newRequestQueue(this);
+     //Initialize String request for movieNames
+     StringRequest nameRequest = new StringRequest(Request.Method.GET, apiUrlName, new Response.Listener<String>() {
+         @Override
+         public void onResponse(String response) {
+             if (response != null) {
+                 try {
+                     //convert json response to objects/classes
+                     JsonResponse jsonResponse = new Gson().fromJson(response, JsonResponse.class);
+                     //hide progress indicator
+                     progressIndicator.setVisibility(View.GONE);
+                     System.out.println(jsonResponse);
+                     //parse data to movie object
+                    parseMovieResponse(jsonResponse,true);
+
+//                        JSONArray jsonArray = new JSONArray(response);
+//                        parseArray(jsonArray);
+                 } catch (Exception e) {
+                     e.printStackTrace();
+                 }
+             }
+
+         }
+
+     }, new Response.ErrorListener() {
+         @Override
+         public void onErrorResponse(VolleyError error) {
+             Toast.makeText(getApplicationContext(), error.toString(), Toast.LENGTH_LONG).show();
+         }
+     }
+
+     );
+     queue.add(nameRequest);
+
+    }
+
 }
