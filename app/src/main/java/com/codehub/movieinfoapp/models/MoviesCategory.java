@@ -4,7 +4,17 @@ import java.util.ArrayList;
 
 public class MoviesCategory {
     public int id;
+
+    public String getCategoryUrl() {
+        return categoryUrl;
+    }
+
+    public void setCategoryUrl(String categoryUrl) {
+        this.categoryUrl = categoryUrl;
+    }
+
     public String categoryName;
+    public String categoryUrl;
     public ArrayList<Movie> movies;
 
     public int getId() {
@@ -30,4 +40,5 @@ public class MoviesCategory {
     public void setMovies(ArrayList<Movie> movies) {
         this.movies = movies;
     }
+
 }

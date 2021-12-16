@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 
+import com.android.volley.Cache;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -28,10 +29,12 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 import static android.service.controls.ControlsProviderService.TAG;
 
@@ -69,25 +72,26 @@ public class FavouritesFragment extends AbstractFragment {
 
     }
 
-    public void getFavouritesFromDB(){
-        count=0;
-        favouriteMovies=new ArrayList<>();
+    public void getFavouritesFromDB() {
+        try {
+            count = 0;
+            favouriteMovies = new ArrayList<>();
 
-    //Initialize request que
-        RequestQueue queue = Volley.newRequestQueue(getActivity());
-        // Add a new document with a generated ID
-        DocumentReference docRef = fireStoreDb.collection("users").document(FirebaseAuth.getInstance().getCurrentUser().getUid());
-        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()) {
-                    DocumentSnapshot document = task.getResult();
-                    if (document.exists()) {
-                        if(document.get("favouriteMovies")!=null){
-                            List<Long> favourites = (List<Long>) document.get("favouriteMovies");
-                            if(!favourites.isEmpty()){
-                                for(long i:favourites){
-                                   baseUrl="https://api.themoviedb.org/3/movie/"+i+"?api_key="+ BuildConfig.MDB_API_KEY +"&language=en-US";
+            //Initialize request que
+            RequestQueue queue = Volley.newRequestQueue(getContext());
+            // Add a new document with a generated ID
+            DocumentReference docRef = fireStoreDb.collection("users").document(FirebaseAuth.getInstance().getCurrentUser().getUid());
+            docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                    if (task.isSuccessful()) {
+                        DocumentSnapshot document = task.getResult();
+                        if (document.exists()) {
+                            if (document.get("favouriteMovies") != null) {
+                                List<Long> favourites = (List<Long>) document.get("favouriteMovies");
+                                if (!favourites.isEmpty()) {
+                                    for (long i : favourites) {
+                                        baseUrl = "https://api.themoviedb.org/3/movie/" + i + "?api_key=" + BuildConfig.MDB_API_KEY + "&language=en-US";
                                         StringRequest nameRequest = new StringRequest(Request.Method.GET, baseUrl, new Response.Listener<String>() {
                                             @Override
                                             public void onResponse(String response) {
@@ -95,10 +99,10 @@ public class FavouritesFragment extends AbstractFragment {
                                                     try {
                                                         //convert json response to objects/classes
                                                         JsonResultsResponse jsonResultsResponse = new Gson().fromJson(response, JsonResultsResponse.class);
-                                                        System.out.println(jsonResultsResponse);
+                                                        System.out.println("BBLYAT" + jsonResultsResponse);
                                                         //parse data to movie object
                                                         parseMovieResponse(jsonResultsResponse);
-                                                        if(count==favourites.size()-1){
+                                                        if (count == favourites.size() - 1) {
                                                             Collections.reverse(favouriteMovies);
                                                             favouritesAdapter.refreshUi(favouriteMovies);
                                                         }
@@ -126,22 +130,25 @@ public class FavouritesFragment extends AbstractFragment {
                                         //Add request
                                         queue.add(nameRequest);
 
+                                    }
+                                } else {
+                                    favouritesAdapter.refreshUi(favouriteMovies);
                                 }
-                            }else{
-                                favouritesAdapter.refreshUi(favouriteMovies);
+
                             }
-
+                            Log.d(TAG, "DocumentSnapshot data: " + document.getData());
+                        } else {
+                            Log.d(TAG, "No such document");
                         }
-                        Log.d(TAG, "DocumentSnapshot data: " + document.getData());
                     } else {
-                        Log.d(TAG, "No such document");
+                        Log.d(TAG, "get failed with ", task.getException());
                     }
-                } else {
-                    Log.d(TAG, "get failed with ", task.getException());
                 }
-            }
-        });
+            });
 
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+        }
     }
 
     private void parseMovieResponse(JsonResultsResponse response) {

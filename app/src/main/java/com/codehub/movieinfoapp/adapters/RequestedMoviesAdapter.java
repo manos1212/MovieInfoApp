@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.FragmentTransaction;
@@ -17,6 +18,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.codehub.movieinfoapp.R;
 import com.codehub.movieinfoapp.models.Movie;
+import com.codehub.movieinfoapp.rest_api.search_activity.SearchActivity;
+import com.codehub.movieinfoapp.ui.fragments.HomeFragment;
 import com.codehub.movieinfoapp.ui.fragments.MovieInfoFragment;
 import com.google.android.material.card.MaterialCardView;
 import com.squareup.picasso.Picasso;
@@ -113,6 +116,7 @@ public class RequestedMoviesAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                 text  = "Category " + '"'+categoryName+'"';
                 ((CategoryMovieViewHolder)holder).categoryName.setVisibility(View.VISIBLE);
                 ((CategoryMovieViewHolder)holder).recyclerView.setVisibility(View.VISIBLE);
+
                 ((CategoryMovieViewHolder)holder).category_hz_list.setPadding(10,10,10,10);
 
             }else{
@@ -123,10 +127,26 @@ public class RequestedMoviesAdapter extends RecyclerView.Adapter<RecyclerView.Vi
             }
 
             ((CategoryMovieViewHolder)holder).categoryName.setText(text);
-
-            ((CategoryMovieViewHolder)holder).recyclerView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
+            LinearLayoutManager layoutManager = new LinearLayoutManager(context,LinearLayoutManager.HORIZONTAL,false);
+            ((CategoryMovieViewHolder)holder).recyclerView.setLayoutManager(layoutManager);
 //            ((CategoryMovieViewHolder)holder).recyclerView.setHasFixedSize(true);
             ((CategoryMovieViewHolder)holder).recyclerView.setAdapter(new MovieAdapter(context, requestedCategoryMovies));
+            ((CategoryMovieViewHolder)holder).recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+                @Override
+                public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                    super.onScrolled(recyclerView, dx, dy);
+                    int pos = layoutManager.findLastCompletelyVisibleItemPosition();
+                    int numItems = recyclerView.getAdapter().getItemCount();
+//                if (!isLoading) {
+                    if (pos>=numItems-1) {
+//                        holder.circular_indicator.setVisibility(View.VISIBLE); //Enable to show indicator on horizontal scroll
+                        SearchActivity.getInstance().paginateCategoryResults((CategoryMovieViewHolder) holder);
+
+                    }
+//                }
+                }
+            });
+
 //            ((CategoryMovieViewHolder)holder).categoryName.setText(categories.get(position).categoryName);
         }
     }
@@ -158,7 +178,7 @@ public class RequestedMoviesAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         }
     }
 
-    private static class CategoryMovieViewHolder extends RecyclerView.ViewHolder {
+    public static class CategoryMovieViewHolder extends RecyclerView.ViewHolder {
         RecyclerView recyclerView;
         TextView categoryName;
         TextView movies_tag_word;
@@ -176,7 +196,7 @@ public class RequestedMoviesAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         }
     }
 
-    public  void filterList(ArrayList<Movie> filteredList,boolean isCategoryMovie,String categoryName,boolean pagination){
+    public  void filterList(ArrayList<Movie> filteredList,boolean isCategoryMovie,String categoryName,boolean pagination,@Nullable Integer scrollPosition){
 
         if(!pagination) {
             if (isCategoryMovie) {
@@ -191,5 +211,13 @@ public class RequestedMoviesAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         }
 
         notifyDataSetChanged();
+        if(scrollPosition!=null){
+            SearchActivity.getInstance().search_movies_rv.scrollToPosition(scrollPosition);
+        }
+    }
+    public void updatePagUi(CategoryMovieViewHolder holder,ArrayList<Movie> filteredList){
+        requestedCategoryMovies.addAll(filteredList);
+        holder.recyclerView.getAdapter().notifyDataSetChanged();
+
     }
 }

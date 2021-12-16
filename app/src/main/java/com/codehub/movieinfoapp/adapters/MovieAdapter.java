@@ -100,4 +100,5 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
             movieThumbnail = itemView.findViewById(R.id.movie_thumbnail);
         }
     }
+
 }

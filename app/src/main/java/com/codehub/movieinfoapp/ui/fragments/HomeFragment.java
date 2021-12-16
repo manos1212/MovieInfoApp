@@ -32,6 +32,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class HomeFragment extends AbstractFragment {
+    private static HomeFragment instance = null;
     private RecyclerView category_recyclerView;
     private CategoryAdapter categoryAdapter;
     private ArrayList<MoviesCategory> categories;
@@ -39,19 +40,25 @@ public class HomeFragment extends AbstractFragment {
     private Handler handler;
     private Runnable workRunnable;
     int count;
-    public static String popularApiUrl = "https://api.themoviedb.org/3/movie/popular?api_key=" + BuildConfig.MDB_API_KEY + "&language=en-US&page=1";
-    public static String topRatedApiUrl = "https://api.themoviedb.org/3/movie/top_rated?api_key=" + BuildConfig.MDB_API_KEY + "&language=en-US&page=1";
-    public static String nowPlayingApiUrl = "https://api.themoviedb.org/3/movie/now_playing?api_key=" + BuildConfig.MDB_API_KEY + "&language=en-US&page=1";
-    public static String upcomingApiUrl = "https://api.themoviedb.org/3/movie/upcoming?api_key=" + BuildConfig.MDB_API_KEY + "&language=en-US&page=1";
+
+    public static String popularApiUrl = "https://api.themoviedb.org/3/movie/popular?api_key=" + BuildConfig.MDB_API_KEY + "&language=en-US&page=";
+    public static String topRatedApiUrl = "https://api.themoviedb.org/3/movie/top_rated?api_key=" + BuildConfig.MDB_API_KEY + "&language=en-US&page=";
+    public static String nowPlayingApiUrl = "https://api.themoviedb.org/3/movie/now_playing?api_key=" + BuildConfig.MDB_API_KEY + "&language=en-US&page=";
+    public static String upcomingApiUrl = "https://api.themoviedb.org/3/movie/upcoming?api_key=" + BuildConfig.MDB_API_KEY + "&language=en-US&page=";
     public static String[] categoryNames = {"Trending now","All Time Most Popular","Top Rated","Coming Soon"};
     public static String[] categoriesUrlList = {nowPlayingApiUrl, popularApiUrl,topRatedApiUrl,upcomingApiUrl};
     @Override
     public int getLayoutRes() {
         return R.layout.fragment_home;
     }
+    public static HomeFragment getInstance() {
+        return instance;
+    }
+
 
     @Override
     public void startOperations(View view) {
+        instance = this;
         count=0;
         categories=new ArrayList<>();
         handler = new Handler(Looper.getMainLooper() /*UI thread*/);
@@ -69,6 +76,7 @@ public class HomeFragment extends AbstractFragment {
         LinearLayoutManager manager = new LinearLayoutManager(getContext());
         category_recyclerView.setLayoutManager(manager);
         category_recyclerView.setAdapter(categoryAdapter);
+
 
         toolBarTitle.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -94,7 +102,7 @@ public class HomeFragment extends AbstractFragment {
         //Initialize String request for movieNames
 
         for(String categoryUrl:categoriesUrlList){
-            StringRequest nameRequest = new StringRequest(Request.Method.GET, categoryUrl, new Response.Listener<String>() {
+            StringRequest nameRequest = new StringRequest(Request.Method.GET, categoryUrl+1, new Response.Listener<String>() {
                 @Override
                 public void onResponse(String response) {
                     if (response != null) {
@@ -103,7 +111,7 @@ public class HomeFragment extends AbstractFragment {
                             JsonResponse jsonResponse = new Gson().fromJson(response, JsonResponse.class);
                             //hide progress indicator
 //                        progressIndicator.setVisibility(View.GONE);
-                            System.out.println(jsonResponse);
+                            System.out.println("HOME"+jsonResponse);
                             //parse data to movie object
                             MoviesCategory category = parseCategoryResponse(jsonResponse,categoryNames[count],categoryUrl);
                             categories.add(category);
@@ -189,10 +197,72 @@ public class HomeFragment extends AbstractFragment {
         }
         moviesCategory.setMovies(movies);
         moviesCategory.setCategoryName(categoryName);
+        moviesCategory.setCategoryUrl(categoryUrl);
         return  moviesCategory;
 
 
     }
+    public void paginateResults(String categoryUrl, int page, int position, CategoryAdapter.CategoryViewHolder holder){
+        String apiUrlName = categoryUrl + page;
 
+
+        //Initialize request que
+        RequestQueue queue = Volley.newRequestQueue(getActivity());
+        //Initialize String request for movieNames
+        StringRequest nameRequest = new StringRequest(Request.Method.GET, apiUrlName, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                if (response != null) {
+                    try {
+                        //convert json response to objects/classes
+                        JsonResponse jsonResponse = new Gson().fromJson(response, JsonResponse.class);
+                        //hide progress indicator
+                        System.out.println(jsonResponse);
+                        //parse data to movie object
+                        parseMovieResponse(jsonResponse,position,holder);
+
+//                        JSONArray jsonArray = new JSONArray(response);
+//                        parseArray(jsonArray);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+
+            }
+
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(getActivity(), error.toString(), Toast.LENGTH_LONG).show();
+            }
+        }
+
+        );
+        queue.add(nameRequest);
+
+    }
+
+    private void parseMovieResponse(JsonResponse response, int position, CategoryAdapter.CategoryViewHolder holder) {
+        ArrayList<Movie> movies = new ArrayList<>();
+        List<JsonResultsResponse> results = response.getResults();
+        for(int i=0;i<results.size();i++){
+            try {
+//                JSONObject object = jsonArray.getJSONObject(i);
+                Movie movie = new Movie();
+                movie.setMovieName(results.get(i).getTitle());
+                movie.setMovieThumbnailUrl(results.get(i).getPoster_path());
+                movie.setId(results.get(i).getId());
+                movie.setMovieDescription(results.get(i).getOverview());
+                movie.setMovieRating(results.get(i).getVote_average());
+                movies.add(movie);
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+        }
+        categoryAdapter.updateMoviesRV(movies,position,holder);
+
+    }
 
 }
