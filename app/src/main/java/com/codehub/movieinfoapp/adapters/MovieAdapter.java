@@ -80,6 +80,8 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
          });
     }
 
+
+
     @Override
     public int getItemCount() {
         if(movies!=null){

@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
+import android.os.Parcelable;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.MotionEvent;
@@ -44,17 +45,18 @@ import java.util.Map;
 
 public class SearchActivity extends AbstractActivity {
     private static SearchActivity instance = null;
-
+    private LinearLayoutManager manager;
+    Parcelable state;
     EditText searchText;
     ImageView back_btn;
-    public RecyclerView search_movies_rv;
-    RecyclerView search_movie_category_rv;
+    RecyclerView search_movies_rv;
     ArrayList<Movie> movies;
     ArrayList<Movie> categoryMovies;
     RequestedMoviesAdapter movieAdapter;
 //    RequestedCategoryMoviesAdapter categoryMoviesAdapter;
     Map<String,Integer> api_movie_categories;
     String category_type;
+    int category_num;
     TextView movie_list_title;
     private Handler handler;
     Runnable workRunnable;
@@ -63,7 +65,6 @@ public class SearchActivity extends AbstractActivity {
     int catPage;
     boolean isLoading;
     ProgressBar progressIndicator;
-    int lastFirstVisiblePosition;
 
     @Override
     public int getLayoutRes() {
@@ -76,13 +77,13 @@ public class SearchActivity extends AbstractActivity {
     @Override
     public void startOperations() {
         instance = this;
-        progressIndicator =  findViewById(R.id.search_progress_indicator);
-        isLoading=false;
-        handler= new Handler(Looper.getMainLooper());
+        progressIndicator = findViewById(R.id.search_progress_indicator);
+        isLoading = false;
+        handler = new Handler(Looper.getMainLooper());
         api_movie_categories = setCategories();
         searchText = findViewById(R.id.textField_Search);
         back_btn = findViewById(R.id.back_btn);
-        movie_list_title  = findViewById(R.id.search_movie_list_title);
+        movie_list_title = findViewById(R.id.search_movie_list_title);
         searchText.requestFocus();
 //        category_title = findViewById(R.id.search_category_title);
         back_btn.setOnClickListener(new View.OnClickListener() {
@@ -104,20 +105,25 @@ public class SearchActivity extends AbstractActivity {
             }
 
 
-
-
             @Override
             public void afterTextChanged(Editable editable) {
-               getUserInput(editable.toString(),0);
+                getUserInput(editable.toString());
             }
         });
 
         search_movies_rv = findViewById(R.id.searchForMovies_recycler_view);
-        movieAdapter = new RequestedMoviesAdapter(SearchActivity.this,movies,categoryMovies,category_type);
-        LinearLayoutManager manager = new LinearLayoutManager(SearchActivity.this);
+        manager = new LinearLayoutManager(SearchActivity.this);
         search_movies_rv.setLayoutManager(manager);
-        search_movies_rv.setAdapter(movieAdapter);
-        search_movies_rv.setItemViewCacheSize(100);
+
+        //handle state when user navigates away from Search Activity
+        if (state == null){
+            movieAdapter = new RequestedMoviesAdapter(SearchActivity.this, movies, categoryMovies, category_type,false);
+            search_movies_rv.setAdapter(movieAdapter);
+            }else{
+            loadPreviousState();
+        }
+
+//        search_movies_rv.setItemViewCacheSize(100);
         search_movies_rv.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
@@ -136,45 +142,52 @@ public class SearchActivity extends AbstractActivity {
         });
 
         hideKeyboardOnScroll(search_movies_rv);
-        getUserInput(latestQuery,lastFirstVisiblePosition);
+//        getUserInput(latestQuery);
     }
 
-    private void getUserInput(String query, Integer scrollPosition){
+    private void getUserInput(String query){
         handler.removeCallbacks(workRunnable);
-        workRunnable = () -> applyChecks(query,scrollPosition);
+        workRunnable = () -> applyChecks(query);
         handler.postDelayed(workRunnable, 250 /*delay*/);
         latestQuery = query;
-
     }
 
     @Override
     public void stopOperations() {
-        lastFirstVisiblePosition=((LinearLayoutManager)search_movies_rv.getLayoutManager()).findFirstCompletelyVisibleItemPosition();
+        state = manager.onSaveInstanceState();
     }
 
-    private void applyChecks(String str,Integer scrollPosition) {
+    private void applyChecks(String str) {
         if(!str.isEmpty()){
-            prepareData(str,scrollPosition);
+            prepareData(str);
             //scroll top
-//            search_movies_rv.getLayoutManager().scrollToPosition(scrollPosition);
+            search_movies_rv.getLayoutManager().scrollToPosition(0);
         }else{
             movie_list_title.setText("");
 //            category_title.setText("");
-            movieAdapter.filterList(null,false,null,false,null);
-            movieAdapter.filterList(null,true,null,false,null);
+            movieAdapter.filterList(null,false,null,false);
+            movieAdapter.filterList(null,true,null,false);
 //            movieAdapter.filterList(new ArrayList<>());
         }
     }
-
-    private void prepareData(String query,int scrollPosition) {
+    private void loadPreviousState() {
+        search_movies_rv.setAdapter(movieAdapter);
+        manager.onRestoreInstanceState(state);
+        searchText.clearFocus();
+    }
+    private void prepareData(String query) {
 //        if(!query.isEmpty()) {
             String apiUrlCategory = null;
             category_type = "";
+            category_num = 0;
 
             for (Map.Entry<String, Integer> entry : api_movie_categories.entrySet()) {
                 if (query.toLowerCase().contains(entry.getKey().toLowerCase())) {
-                    apiUrlCategory = "https://api.themoviedb.org/3/discover/movie?api_key=" + BuildConfig.MDB_API_KEY + "&with_genres=" + entry.getValue();
                     category_type = entry.getKey();
+                    category_num = entry.getValue();
+                    apiUrlCategory = "https://api.themoviedb.org/3/discover/movie?api_key=" + BuildConfig.MDB_API_KEY + "&with_genres=" + category_num;
+
+
                     break;
                 }
             }
@@ -199,7 +212,7 @@ public class SearchActivity extends AbstractActivity {
                             progressIndicator.setVisibility(View.GONE);
                             System.out.println(jsonResponse);
                             //parse data to movie object
-                            boolean hasMovies =  parseMovieResponse(jsonResponse,false,scrollPosition);
+                            boolean hasMovies =  parseMovieResponse(jsonResponse,false);
                             System.out.println("HAs movjdhxhvjv" + hasMovies);
                             String text;
                             if(hasMovies){
@@ -268,7 +281,7 @@ public class SearchActivity extends AbstractActivity {
             } else {
 //                category_title.setVisibility(View.GONE);
 //                category_title.setText("");
-                movieAdapter.filterList(null,true,category_type,false,null);
+                movieAdapter.filterList(null,true,category_type,false);
             }
 
 //        }else{
@@ -282,7 +295,7 @@ public class SearchActivity extends AbstractActivity {
 
 
 
-    private boolean parseMovieResponse(JsonResponse response, boolean pagination,Integer scrollPosition) {
+    private boolean parseMovieResponse(JsonResponse response, boolean pagination) {
         ArrayList<Movie> movies = new ArrayList<>();
         List<JsonResultsResponse> results = response.getResults();
         for(int i=0;i<results.size();i++){
@@ -302,7 +315,7 @@ public class SearchActivity extends AbstractActivity {
 
         }
             page+=1;
-            movieAdapter.filterList(movies,false,null,pagination,scrollPosition);
+            movieAdapter.filterList(movies,false,null,pagination);
             isLoading = false;
         return movies.size() > 0;
     }
@@ -329,11 +342,12 @@ public class SearchActivity extends AbstractActivity {
         }
         if(pagination){
             movieAdapter.updatePagUi(holder,movies);
+
             catPage+=1;
         }
 //            movieAdapter.notifyItemInserted(0);
         else{
-            movieAdapter.filterList(movies,true,category_type,false,null);
+            movieAdapter.filterList(movies,true,category_type,false);
         }
 
 
@@ -377,7 +391,7 @@ public class SearchActivity extends AbstractActivity {
 
                 InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
-
+                searchText.clearFocus();
                 return false;
             }
         });
@@ -397,17 +411,23 @@ public class SearchActivity extends AbstractActivity {
          @Override
          public void onResponse(String response) {
              if (response != null) {
+                 System.out.println("THIS RESPONSe"+ response);
                  try {
                      //convert json response to objects/classes
                      JsonResponse jsonResponse = new Gson().fromJson(response, JsonResponse.class);
-                     //hide progress indicator
-                     progressIndicator.setVisibility(View.GONE);
-                     System.out.println(jsonResponse);
-                     //parse data to movie object
-                    parseMovieResponse(jsonResponse,true,lastFirstVisiblePosition);
+                     //if no more results then we stop pagination by avoiding running parseMovieResponse function below,thus not setting isloading to false inside parsemovieresponse (and by not increasing page count)
+                     if (!jsonResponse.getResults().isEmpty()){
+                         //hide progress indicator
+
+                         System.out.println(jsonResponse);
+                         //parse data to movie object
+                         parseMovieResponse(jsonResponse,true);
 
 //                        JSONArray jsonArray = new JSONArray(response);
 //                        parseArray(jsonArray);
+
+                     }
+                     progressIndicator.setVisibility(View.GONE);
                  } catch (Exception e) {
                      e.printStackTrace();
                  }
@@ -429,7 +449,8 @@ public class SearchActivity extends AbstractActivity {
 
 
     public void paginateCategoryResults(RequestedMoviesAdapter.CategoryMovieViewHolder holder){
-        String apiUrlName = "https://api.themoviedb.org/3/discover/movie?api_key=" + BuildConfig.MDB_API_KEY + "&with_genres=" + category_type + "&page="+catPage;
+        movieAdapter.isLoading = true;
+        String apiUrlName = "https://api.themoviedb.org/3/discover/movie?api_key=" + BuildConfig.MDB_API_KEY + "&with_genres=" + category_num + "&page="+catPage;
 
 
         //Initialize request que
@@ -442,10 +463,12 @@ public class SearchActivity extends AbstractActivity {
                     try {
                         //convert json response to objects/classes
                         JsonResponse jsonResponse = new Gson().fromJson(response, JsonResponse.class);
-                        //hide progress indicator
-                        System.out.println(jsonResponse);
-                        //parse data to movie object
-                        parseCategoryResponse(jsonResponse,true,holder);
+                        if(!jsonResponse.getResults().isEmpty()) {
+                            //hide progress indicator
+                            System.out.println(jsonResponse);
+                            //parse data to movie object
+                            parseCategoryResponse(jsonResponse, true, holder);
+                        }
 
 //                        JSONArray jsonArray = new JSONArray(response);
 //                        parseArray(jsonArray);

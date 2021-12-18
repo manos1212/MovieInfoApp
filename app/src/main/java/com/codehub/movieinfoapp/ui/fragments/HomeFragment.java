@@ -58,6 +58,7 @@ public class HomeFragment extends AbstractFragment {
 
     @Override
     public void startOperations(View view) {
+        System.out.println("UUUUUUUUUUUUUU");
         instance = this;
         count=0;
         categories=new ArrayList<>();
@@ -203,6 +204,7 @@ public class HomeFragment extends AbstractFragment {
 
     }
     public void paginateResults(String categoryUrl, int page, int position, CategoryAdapter.CategoryViewHolder holder){
+        holder.isLoading=true;
         String apiUrlName = categoryUrl + page;
 
 
@@ -216,10 +218,12 @@ public class HomeFragment extends AbstractFragment {
                     try {
                         //convert json response to objects/classes
                         JsonResponse jsonResponse = new Gson().fromJson(response, JsonResponse.class);
-                        //hide progress indicator
-                        System.out.println(jsonResponse);
-                        //parse data to movie object
-                        parseMovieResponse(jsonResponse,position,holder);
+                        if(!jsonResponse.getResults().isEmpty()) {
+                            //hide progress indicator
+                            System.out.println(jsonResponse);
+                            //parse data to movie object
+                            parseMovieResponse(jsonResponse, position, holder);
+                        }
 
 //                        JSONArray jsonArray = new JSONArray(response);
 //                        parseArray(jsonArray);

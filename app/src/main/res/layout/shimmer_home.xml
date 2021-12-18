@@ -32,6 +32,12 @@
         <include layout="@layout/shimmer_card"/>
         <include layout="@layout/shimmer_card"/>
         <include layout="@layout/shimmer_card"/>
+        <include layout="@layout/shimmer_card"/>
+        <include layout="@layout/shimmer_card"/>
+        <include layout="@layout/shimmer_card"/>
+        <include layout="@layout/shimmer_card"/>
+        <include layout="@layout/shimmer_card"/>
+        <include layout="@layout/shimmer_card"/>
 
 
 

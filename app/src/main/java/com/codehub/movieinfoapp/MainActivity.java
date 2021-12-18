@@ -37,6 +37,7 @@ public class MainActivity extends AbstractActivity {
         return R.layout.activity_main;
     }
 
+
     @Override
     public void startOperations() {
         topAppBar = findViewById(R.id.topAppBar);
@@ -91,7 +92,6 @@ public class MainActivity extends AbstractActivity {
 
     @Override
     public void stopOperations() {
-
     }
 
     @Override

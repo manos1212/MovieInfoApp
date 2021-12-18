@@ -74,7 +74,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
 //                int firstVisibleItemPosition = manager.findFirstVisibleItemPosition();
 //                int firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition();
 
-//                if (!isLoading) {
+                if (!holder.isLoading) {
                     if (pos>=numItems-1) {
 //                        holder.circular_indicator.setVisibility(View.VISIBLE); //Enable to show indicator on horizontal scroll
                         HomeFragment.getInstance().paginateResults(categories.get(position).categoryUrl, urlPages[position],position,holder);
@@ -82,11 +82,12 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
                         System.out.println("PPOSITION" + urlPages[position]);
 
                     }
-//                }
+                }
             }
         });
         holder.categoryName.setText(categories.get(position).categoryName);
     }
+
 
     @Override
     public int getItemCount() {
@@ -98,6 +99,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
         TextView categoryName;
         TextView movies_word_tag;
         ProgressBar circular_indicator;
+        public boolean isLoading;
 
 
         public CategoryViewHolder(View itemView) {
@@ -106,6 +108,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
             categoryName = (TextView) itemView.findViewById(R.id.category_name_textView);
             movies_word_tag = (TextView) itemView.findViewById(R.id.movieList_results);
             movies_word_tag.setVisibility(View.GONE);
+            isLoading=false;
             circular_indicator = itemView.findViewById(R.id.pagination_progress_indicator);
 
         }
@@ -126,6 +129,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
 //        movieAdapter.notifyDataSetChanged();
 //        holder.circular_indicator.setVisibility(View.GONE);// enable if want to use indicator on horizontal scroll
         holder.recyclerView.getAdapter().notifyDataSetChanged();
+        holder.isLoading=false;
 
 
         System.out.println("CAT POST" + position);

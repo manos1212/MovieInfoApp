@@ -1,6 +1,8 @@
 package com.codehub.movieinfoapp.adapters;
 
 import android.content.Context;
+import android.os.Parcelable;
+import android.util.SparseIntArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,7 +11,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.FragmentTransaction;
@@ -29,17 +30,20 @@ import java.util.ArrayList;
 public class RequestedMoviesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public ArrayList<Movie> requestedMovies;
     public ArrayList<Movie> requestedCategoryMovies;
-    private Context context;
+    public Context context;
     private String categoryName;
+    public boolean isLoading;
     private LayoutInflater layoutInflater;
+    Parcelable categoryListState; // if there were many horizontal lists we should use a list of Parcelables instead.
     private String baseURL = "https://image.tmdb.org/t/p/w500";
 
     //Url Prefix for used as thumbnail url prefix
     private static final String base_url = "https://image.tmdb.org/t/p/w500";
 
-    public RequestedMoviesAdapter(Context context,ArrayList<Movie> requestedMovies,ArrayList<Movie> requestedCategoryMovies,String categoryName) {
+    public RequestedMoviesAdapter(Context context,ArrayList<Movie> requestedMovies,ArrayList<Movie> requestedCategoryMovies,String categoryName,boolean isLoading) {
         this.requestedMovies = requestedMovies;
         this.categoryName = categoryName;
+        this.isLoading = isLoading;
         this.requestedCategoryMovies = requestedCategoryMovies;
         this.context = context;
         this.layoutInflater = LayoutInflater.from(context);
@@ -126,29 +130,49 @@ public class RequestedMoviesAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                 ((CategoryMovieViewHolder)holder).category_hz_list.setPadding(0,0,0,0);
             }
 
+
+
+            if (categoryListState!=null) {
+//                ((CategoryMovieViewHolder) holder).layoutManager.scrollToPositionWithOffset(lastSeenFirstPosition, 0);
+                ((CategoryMovieViewHolder) holder).layoutManager.onRestoreInstanceState(categoryListState);
+            }
             ((CategoryMovieViewHolder)holder).categoryName.setText(text);
-            LinearLayoutManager layoutManager = new LinearLayoutManager(context,LinearLayoutManager.HORIZONTAL,false);
-            ((CategoryMovieViewHolder)holder).recyclerView.setLayoutManager(layoutManager);
+
+            ((CategoryMovieViewHolder)holder).recyclerView.setLayoutManager(((CategoryMovieViewHolder) holder).layoutManager);
 //            ((CategoryMovieViewHolder)holder).recyclerView.setHasFixedSize(true);
             ((CategoryMovieViewHolder)holder).recyclerView.setAdapter(new MovieAdapter(context, requestedCategoryMovies));
+
+
             ((CategoryMovieViewHolder)holder).recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
                 @Override
                 public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                     super.onScrolled(recyclerView, dx, dy);
-                    int pos = layoutManager.findLastCompletelyVisibleItemPosition();
+                    int pos = ((CategoryMovieViewHolder) holder).layoutManager.findLastCompletelyVisibleItemPosition();
                     int numItems = recyclerView.getAdapter().getItemCount();
-//                if (!isLoading) {
+                if (!isLoading) {
                     if (pos>=numItems-1) {
 //                        holder.circular_indicator.setVisibility(View.VISIBLE); //Enable to show indicator on horizontal scroll
                         SearchActivity.getInstance().paginateCategoryResults((CategoryMovieViewHolder) holder);
 
                     }
-//                }
+                }
                 }
             });
 
 //            ((CategoryMovieViewHolder)holder).categoryName.setText(categories.get(position).categoryName);
         }
+
+    }
+
+    @Override
+    public void onViewRecycled(RecyclerView.ViewHolder holder) {
+        if(holder instanceof CategoryMovieViewHolder){
+            categoryListState = ((CategoryMovieViewHolder) holder).layoutManager.onSaveInstanceState();
+            super.onViewRecycled(holder);
+        }
+
+        // Store position
+
     }
 
     @Override
@@ -179,6 +203,7 @@ public class RequestedMoviesAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     }
 
     public static class CategoryMovieViewHolder extends RecyclerView.ViewHolder {
+        private LinearLayoutManager layoutManager;
         RecyclerView recyclerView;
         TextView categoryName;
         TextView movies_tag_word;
@@ -192,11 +217,16 @@ public class RequestedMoviesAdapter extends RecyclerView.Adapter<RecyclerView.Vi
             movies_tag_word = itemView.findViewById(R.id.movieList_results);
             categoryName.setVisibility(View.GONE);
             recyclerView.setVisibility(View.GONE);
+            layoutManager = new LinearLayoutManager(itemView.getContext(),LinearLayoutManager.HORIZONTAL,false);
             category_hz_list.setPadding(0,0,0,0);
         }
+
+
+
     }
 
-    public  void filterList(ArrayList<Movie> filteredList,boolean isCategoryMovie,String categoryName,boolean pagination,@Nullable Integer scrollPosition){
+
+    public  void filterList(ArrayList<Movie> filteredList, boolean isCategoryMovie, String categoryName, boolean pagination){
 
         if(!pagination) {
             if (isCategoryMovie) {
@@ -205,19 +235,23 @@ public class RequestedMoviesAdapter extends RecyclerView.Adapter<RecyclerView.Vi
             } else {
                 requestedMovies = filteredList;
             }
+            notifyDataSetChanged();
         }else{
+
                 requestedMovies.addAll(filteredList);
+//            notifyDataSetChanged();
+                notifyItemRangeChanged(1,filteredList.size());
 
         }
 
-        notifyDataSetChanged();
-        if(scrollPosition!=null){
-            SearchActivity.getInstance().search_movies_rv.scrollToPosition(scrollPosition);
-        }
+
     }
     public void updatePagUi(CategoryMovieViewHolder holder,ArrayList<Movie> filteredList){
         requestedCategoryMovies.addAll(filteredList);
+        System.out.println(filteredList.size()+"ldldldlddld");
         holder.recyclerView.getAdapter().notifyDataSetChanged();
+        isLoading=false;
 
     }
+
 }

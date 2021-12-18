@@ -12,7 +12,9 @@
         android:roundIcon="@mipmap/moviepedia_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MovieInfoApp">
-        <activity android:name=".MainActivity">
+        <activity
+            android:name=".MainActivity"
+            android:configChanges="orientation|screenSize">
 
         </activity>
         <activity

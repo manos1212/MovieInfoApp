@@ -174,7 +174,10 @@ public class LoginActivity extends AbstractActivity {
         mAuth.signInWithCredential(credential)
                 .addOnSuccessListener(this, authResult -> {
                     startActivity(new Intent(LoginActivity.this, MainActivity.class));
-                    addGoogleUserToFireStore(acct.getEmail());
+                    boolean isNew = authResult.getAdditionalUserInfo().isNewUser(); //check if it't first time sign in with google in order to avoid adding him again to firestore, thus overwrite favourites data
+                    if(isNew) {
+                        addGoogleUserToFireStore(acct.getEmail());
+                    }
                     finish();
                 })
                 .addOnFailureListener(this, e -> Toast.makeText(LoginActivity.this, "Authentication failed.",
