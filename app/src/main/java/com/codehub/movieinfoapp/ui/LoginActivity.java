@@ -1,6 +1,8 @@
 package com.codehub.movieinfoapp.ui;
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.os.Build;
 import android.service.controls.ControlsProviderService;
 import android.util.Log;
 import android.view.View;
@@ -63,6 +65,11 @@ public class LoginActivity extends AbstractActivity {
 
     @Override
     public void startOperations() {
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+//            this.getWindow().getDecorView().setSystemUiVisibility( View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN|View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+//            // edited here
+//            this.getWindow().setStatusBarColor(Color.WHITE);
+//        }
         fireStoreDb = FirebaseFirestore.getInstance();
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))

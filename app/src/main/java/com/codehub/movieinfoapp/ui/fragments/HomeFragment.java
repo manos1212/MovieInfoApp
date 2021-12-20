@@ -81,7 +81,7 @@ public class HomeFragment extends AbstractFragment {
         toolBarTitle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                category_recyclerView.getLayoutManager().scrollToPosition(0);
+                category_recyclerView.getLayoutManager().smoothScrollToPosition(category_recyclerView,new RecyclerView.State(),0);
             }
         });
     }
