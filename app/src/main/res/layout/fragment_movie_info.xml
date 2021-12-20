@@ -10,13 +10,14 @@
     android:focusable="true">
 
     <ImageView
+        android:paddingBottom="5dp"
         android:id="@+id/movie_image"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:scaleType="fitCenter"
         android:src="@drawable/app_icon"
         android:background="@color/black"
-        app:layout_constraintBottom_toTopOf="@id/movie_rating"
+        app:layout_constraintBottom_toTopOf="@id/movie_rating_icon"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHeight_percent=".5"
         app:layout_constraintStart_toStartOf="parent"
@@ -37,18 +38,28 @@
         app:layout_constraintTop_toTopOf="@id/movie_image"
         app:maxImageSize="30dp" />
 
+    <ImageView
+        android:id="@+id/movie_rating_icon"
+        android:layout_marginTop="-10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_round_star_rate_24"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="@id/movie_rating"
+        app:layout_constraintTop_toTopOf="@id/movie_rating"/>
+
     <TextView
         android:id="@+id/movie_rating"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:gravity="center"
-        android:padding="12dp"
+        android:padding="10dp"
         android:text="8.9"
         android:textColor="@color/white"
         app:autoSizeTextType="uniform"
         app:layout_constraintBottom_toTopOf="@id/movie_title"
         app:layout_constraintEnd_toStartOf="@id/movie_favourite"
-        app:layout_constraintHeight_percent=".1"
+        app:layout_constraintHeight_percent=".08"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/movie_image" />
 
@@ -56,7 +67,7 @@
         android:id="@+id/movie_favourite"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:padding="12dp"
+        android:padding="13dp"
         android:src="@drawable/ic_baseline_favorite_no_fill_24"
         app:layout_constraintBottom_toTopOf="@id/movie_title"
         app:layout_constraintEnd_toStartOf="@id/movie_share"
@@ -67,7 +78,7 @@
         android:id="@+id/movie_share"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:padding="12dp"
+        android:padding="13dp"
         android:src="@drawable/ic_baseline_share_24"
         app:layout_constraintBottom_toTopOf="@id/movie_title"
         app:layout_constraintEnd_toEndOf="parent"
@@ -83,7 +94,7 @@
         android:text="Title of movie goes here"
         android:textColor="@color/white"
         android:gravity="center"
-        app:autoSizeTextType="uniform"
+        android:textSize="20sp"
         app:layout_constraintBottom_toTopOf="@id/movie_container"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHeight_percent=".1"

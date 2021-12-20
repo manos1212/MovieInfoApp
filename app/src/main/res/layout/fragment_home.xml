@@ -44,6 +44,7 @@
 <!--    app:shimmer_duration="1100"-->
 
     <com.facebook.shimmer.ShimmerFrameLayout
+        app:shimmer_auto_start="false"
         android:id="@+id/home_shimmer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

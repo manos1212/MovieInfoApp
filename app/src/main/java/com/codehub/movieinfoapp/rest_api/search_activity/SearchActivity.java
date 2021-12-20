@@ -40,6 +40,7 @@ import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -53,8 +54,6 @@ public class SearchActivity extends AbstractActivity {
     ArrayList<Movie> movies;
     ArrayList<Movie> categoryMovies;
     RequestedMoviesAdapter movieAdapter;
-//    RequestedCategoryMoviesAdapter categoryMoviesAdapter;
-    Map<String,Integer> api_movie_categories;
     String category_type;
     int category_num;
     TextView movie_list_title;
@@ -80,12 +79,10 @@ public class SearchActivity extends AbstractActivity {
         progressIndicator = findViewById(R.id.search_progress_indicator);
         isLoading = false;
         handler = new Handler(Looper.getMainLooper());
-        api_movie_categories = setCategories();
         searchText = findViewById(R.id.textField_Search);
         back_btn = findViewById(R.id.back_btn);
         movie_list_title = findViewById(R.id.search_movie_list_title);
         searchText.requestFocus();
-//        category_title = findViewById(R.id.search_category_title);
         back_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -181,7 +178,7 @@ public class SearchActivity extends AbstractActivity {
             category_type = "";
             category_num = 0;
 
-            for (Map.Entry<String, Integer> entry : api_movie_categories.entrySet()) {
+            for (LinkedHashMap.Entry<String, Integer> entry : HomeFragment.api_movie_categories.entrySet()) {
                 if (query.toLowerCase().contains(entry.getKey().toLowerCase())) {
                     category_type = entry.getKey();
                     category_num = entry.getValue();
@@ -193,7 +190,6 @@ public class SearchActivity extends AbstractActivity {
             }
 
 
-//        String[] movieCategories = {"popular","latest","now_playing","top_rated"};
 
             String apiUrlName = "https://api.themoviedb.org/3/search/movie?api_key=" + BuildConfig.MDB_API_KEY + "&language=en-US&page=1&include_adult=false&query=" + query;
 
@@ -304,6 +300,7 @@ public class SearchActivity extends AbstractActivity {
                 Movie movie = new Movie();
                 movie.setMovieName(results.get(i).getTitle());
                 movie.setMovieThumbnailUrl(results.get(i).getPoster_path());
+                movie.setMovieThumbnailUrlNoTitle(results.get(i).getBackdrop_path());
                 movie.setId(results.get(i).getId());
                 movie.setMovieDescription(results.get(i).getOverview());
                 movie.setMovieRating(results.get(i).getVote_average());
@@ -352,33 +349,6 @@ public class SearchActivity extends AbstractActivity {
 
 
 
-    }
-
-    private Map<String,Integer> setCategories(){
-        Map<String,Integer> api_movie_categories = new HashMap<>();
-
-        // enter name/url pair
-        api_movie_categories.put("Action", 28);
-        api_movie_categories.put("Adventure", 12);
-        api_movie_categories.put("Animation", 16);
-        api_movie_categories.put("Comedy", 35);
-        api_movie_categories.put("Crime", 80);
-        api_movie_categories.put("Documentary", 99);
-        api_movie_categories.put("Drama", 18);
-        api_movie_categories.put("Family", 10751);
-        api_movie_categories.put("Fantasy", 14);
-        api_movie_categories.put("History", 36);
-        api_movie_categories.put("Horror", 27);
-        api_movie_categories.put("Music", 10402);
-        api_movie_categories.put("Mystery", 9648);
-        api_movie_categories.put("Romance", 10749);
-        api_movie_categories.put("Science Fiction", 878);
-        api_movie_categories.put("TV Movie", 10770);
-        api_movie_categories.put("Thriller", 53);
-        api_movie_categories.put("War", 10752);
-        api_movie_categories.put("Western", 37);
-
-        return api_movie_categories;
     }
 
     @SuppressLint("ClickableViewAccessibility")

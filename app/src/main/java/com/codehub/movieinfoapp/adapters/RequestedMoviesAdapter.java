@@ -34,7 +34,7 @@ public class RequestedMoviesAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     private String categoryName;
     public boolean isLoading;
     private LayoutInflater layoutInflater;
-    Parcelable categoryListState; // if there were many horizontal lists we should use a list of Parcelables instead.
+    Parcelable categoryListState;//used for saving scrolling and lifecycle state // if there were many horizontal lists we should use a list of Parcelables instead.
     private String baseURL = "https://image.tmdb.org/t/p/w500";
 
     //Url Prefix for used as thumbnail url prefix
@@ -73,11 +73,14 @@ public class RequestedMoviesAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         if (holder instanceof MovieViewHolder && requestedMovies!=null && requestedMovies.size()>0) {
             Movie movie = requestedMovies.get(position-1);//use -1 because 1st item ins vertical recycler view is the horizontal rv
             ((MovieViewHolder)holder).movieName_textView.setText(movie.getMovieName());
-            if(movie.getMovieThumbnailUrl()!=null) {
+            if(movie.getMovieThumbnailUrlNoTitle()!=null) {
                 //parse url inside xml image_thumbnail
+                Picasso.get().load(base_url + movie.getMovieThumbnailUrlNoTitle()).into(((MovieViewHolder)holder).movieThumbnail);
+            }else if(movie.getMovieThumbnailUrl()!=null){
                 Picasso.get().load(base_url + movie.getMovieThumbnailUrl()).into(((MovieViewHolder)holder).movieThumbnail);
             }else{
                 ((MovieViewHolder)holder).movieThumbnail.setImageResource(R.drawable.image_place_holder);
+
             }
 
 

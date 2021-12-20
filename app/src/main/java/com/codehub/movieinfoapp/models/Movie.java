@@ -4,6 +4,16 @@ public class Movie {
     private int id;
     private String movieName;
     private String movieThumbnailUrl;
+    private String movieThumbnailUrlNoTitle;
+
+    public String getMovieThumbnailUrlNoTitle() {
+        return movieThumbnailUrlNoTitle;
+    }
+
+    public void setMovieThumbnailUrlNoTitle(String movieThumbnailUrlNoTitle) {
+        this.movieThumbnailUrlNoTitle = movieThumbnailUrlNoTitle;
+    }
+
     private String movieDescription;
     private Double movieRating;
 
